@@ -1,0 +1,9 @@
+.gradle/
+.idea/
+FtcRobotController/FtcRobotController.iml
+FtcRobotController/build/
+TeamCode/TeamCode.iml
+TeamCode/build/
+build/
+ftc_app.iml
+local.properties
