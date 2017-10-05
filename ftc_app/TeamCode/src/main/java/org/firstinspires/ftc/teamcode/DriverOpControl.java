@@ -17,6 +17,7 @@ public class DriverOpControl extends LinearOpMode {
 
     private Servo leftClaw;
     private Servo rightClaw;
+    private Servo relicHolder;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -25,6 +26,8 @@ public class DriverOpControl extends LinearOpMode {
         clawLifter = hardwareMap.dcMotor.get("clawLifter");
         leftClaw = hardwareMap.servo.get("clawLeft");
         rightClaw = hardwareMap.servo.get("clawRight");
+        relicHolder = hardwareMap.servo.get("relicHolder");
+        relicHolder.setPosition(0.35);
 
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
@@ -33,6 +36,7 @@ public class DriverOpControl extends LinearOpMode {
         while(opModeIsActive()){
             manageChassis();
             manageClaw();
+            manageRelicHolder();
             idle();
         }
     }
@@ -82,6 +86,14 @@ public class DriverOpControl extends LinearOpMode {
             clawLifter.setPower(0.5);
         } else {
             clawLifter.setPower(0);
+        }
+    }
+
+    private void manageRelicHolder() {
+        if(gamepad2.x){
+            relicHolder.setPosition(0.8);
+        } else if(gamepad2.b){
+            relicHolder.setPosition(0.35);
         }
     }
 }
