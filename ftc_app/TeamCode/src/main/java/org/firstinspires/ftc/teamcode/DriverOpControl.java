@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * Created by shreyas, howard on 9/16/2017.
+ * Created by shreyas on 9/16/2017.
+ * Updated by Aahaan on 10/04/2017.
  */
-
 @TeleOp (name = "Driver Op Control", group = "Driver Op")
 public class DriverOpControl extends LinearOpMode {
     private DcMotor motorLeft;
@@ -49,15 +49,16 @@ public class DriverOpControl extends LinearOpMode {
 
         double leftPower = 0;
         double rightPower = 0;
-        if (leftTrigger == 0 && rightTrigger != 0) {
+
+        if (leftTrigger == 0 && rightTrigger != 0   ) {
             // We are going forward.
-            leftPower = -1 * rightTrigger - (leftStickX > 0 ? -1 * leftStickX : 0);
-            rightPower = -1 * rightTrigger + (leftStickX < 0 ? -1 * leftStickX : 0);
+            leftPower = rightTrigger - (leftStickX > 0 ? -1 * leftStickX : 0);
+            rightPower = rightTrigger + (leftStickX < 0 ? -1 * leftStickX : 0);
             motion = "Forward";
         } else if (leftTrigger != 0 && rightTrigger == 0) {
             // We are going backwards.
-            leftPower = leftTrigger + (leftStickX < 0 ? leftStickX : 0);
-            rightPower = leftTrigger - (leftStickX > 0 ? leftStickX : 0);
+            leftPower = -1 * leftTrigger + (leftStickX < 0 ? leftStickX : 0);
+            rightPower = -1 * leftTrigger - (leftStickX > 0 ? leftStickX : 0);
             motion = "Backwards";
         }
 
