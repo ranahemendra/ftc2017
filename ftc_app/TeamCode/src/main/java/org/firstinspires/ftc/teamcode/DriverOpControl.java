@@ -73,12 +73,13 @@ public class DriverOpControl extends LinearOpMode {
 
     private void manageClaw() {
         // The code to manage the claw goes here.
+        //later, make it open a little less, so when drop the glyph in cryptobox, doesn't knock others off
         if(gamepad1.x){
             leftClaw.setPosition(0.5);
             rightClaw.setPosition(0);
         } else if (gamepad1.b){
-            leftClaw.setPosition(0);
-            rightClaw.setPosition(0.5);
+            leftClaw.setPosition(0.2);
+            rightClaw.setPosition(0.8);
         }
 
         if(gamepad1.y){
