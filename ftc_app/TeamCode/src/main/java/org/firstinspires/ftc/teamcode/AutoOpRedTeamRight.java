@@ -34,6 +34,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+
 @Autonomous(name = "Auto Op Red Team Right", group = "Autonomous")
 public class AutoOpRedTeamRight extends LinearOpMode {
     Robot bot = new Robot();
@@ -50,11 +61,18 @@ public class AutoOpRedTeamRight extends LinearOpMode {
         // We will use encoders for driving distance.
         bot.setUseEncoderMode();
 
+        // Hold glyph.
+        bot.clampGlyphHolder();
+        bot.moveClawLifterUp(0.5);
+
         // wait for the start button to be pressed.
         waitForStart();
 
+        bot.relicTrackables.activate();
+        RelicRecoveryVuMark scannedVuMark = scanVumarks();
+
         bot.moveJewelKnockerDown();
-        // wait for the servo to move.
+        //wait for the servo to move.
         sleep(1000);
 
         int forwardInches = 10;
@@ -62,6 +80,11 @@ public class AutoOpRedTeamRight extends LinearOpMode {
 
         // Now lift the arm back up.
         bot.resetJewelKnocker();
+        driveForwardDistance(forwardInches);
+
+//        while(opModeIsActive()){
+//
+//        }
     }
 
     void driveForwardDistance(int forwardInches) {
@@ -89,5 +112,46 @@ public class AutoOpRedTeamRight extends LinearOpMode {
             bot.stopDriving();
             bot.setUseEncoderMode();
         }
+    }
+
+    RelicRecoveryVuMark scanVumarks() {
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(bot.relicTemplate);
+        while (opModeIsActive() && vuMark == RelicRecoveryVuMark.UNKNOWN) {
+            vuMark = RelicRecoveryVuMark.from(bot.relicTemplate);
+            idle();
+        }
+
+        if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+            telemetry.addData("VuMark", "%s visible", vuMark);
+
+            OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) bot.relicTemplate.getListener()).getPose();
+            telemetry.addData("Pose", format(pose));
+
+            /* We further illustrate how to decompose the pose into useful rotational and
+             * translational components */
+            if (pose != null) {
+                VectorF trans = pose.getTranslation();
+                Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+                // Extract the X, Y, and Z components of the offset of the target relative to the robot
+                double tX = trans.get(0);
+                double tY = trans.get(1);
+                double tZ = trans.get(2);
+
+                // Extract the rotational components of the target relative to the robot
+                double rX = rot.firstAngle;
+                double rY = rot.secondAngle;
+                double rZ = rot.thirdAngle;
+
+            }
+        } else {
+            telemetry.addData("VuMark", "not visible");
+        }
+
+        telemetry.update();
+        return vuMark;
+    }
+    String format(OpenGLMatrix transformationMatrix) {
+        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 }

@@ -32,6 +32,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.vuforia.Vuforia;
+
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
  * This is NOT an opmode.
@@ -49,6 +56,10 @@ public class Robot {
     static final double AUTONOMOUS_DRIVE_SPEED  = 0.5;
     static final double DRIVE_SPEED             = 0.1;
     static final double TURN_SPEED              = 0.5;
+
+    VuforiaLocalizer vuforia;
+    VuforiaTrackables relicTrackables;
+    VuforiaTrackable relicTemplate;
 
     DcMotor motorLeft;
     DcMotor motorRight;
@@ -93,6 +104,22 @@ public class Robot {
         // Set the default position of all the servos.
 //        relicHolder.setPosition(0.35);
         resetJewelKnocker();
+
+        initVuforia();
+    }
+
+    void initVuforia() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+        parameters.vuforiaLicenseKey = "ARr7YvL/////AAAAGb/1qh0tGkDOrCNudt1/GAZ1QzTs3c5/pYfIEYWRNYiuJLfY1B4Hw8TCkpl/H7ehQE1duIuZ/50IqBecdogHIkW9nVApAHtZeMw52WQ/YDbc6jOtK995dYnU78p/QvZxk4Be+arr/ljflXssN42Cb8ppo2uRAo3TNPGuNOIO/lYyuxMadQoagcF+yv8TLTpJaeTNYcv4U2HZYmYO0hayv1ECBV2NuyHu8oqqLlctpAXRvVfy5SUY0ysLqNrgcqD64YBi5Yh5At296HhKtRT1KSgLu8sJMUGUtvMq+bVEwXf7MA9oLg+5nqRILvajzw/pCmNYId4IeOpHk9LwrHnN0FPcVDtWK8Gd/8FB4M0I9ozj";
+
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+
+        relicTrackables = vuforia.loadTrackablesFromAsset("RelicVuMark");
+        relicTemplate = relicTrackables.get(0);
+        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
     }
 
     void resetEncoders() {
@@ -131,6 +158,17 @@ public class Robot {
 
     void moveJewelKnockerDown() {
         jewelKnocker.setPosition(0.6);
+    }
+
+    void clampGlyphHolder() {
+        leftClaw.setPosition(0.5);
+        rightClaw.setPosition(0);
+    }
+
+    void moveClawLifterUp(double time) throws InterruptedException {
+        clawLifter.setPower(AUTONOMOUS_DRIVE_SPEED);
+        Thread.sleep((long)(time * 1000));
+        resetClawLifter();
     }
 
     void resetClawLifter() {
