@@ -32,7 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This is NOT an opmode.
@@ -42,6 +41,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * This hardware class assumes the device names have been configured on the robot:
  */
 public class Robot {
+    static final double COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
+
+    static final double AUTONOMOUS_DRIVE_SPEED  = 1;
+    static final double DRIVE_SPEED             = 0.1;
+    static final double TURN_SPEED              = 0.5;
+
     DcMotor motorLeft;
     DcMotor motorRight;
 
@@ -55,7 +63,7 @@ public class Robot {
 
 
     /* local OpMode members. */
-    HardwareMap hwMap           =  null;
+    HardwareMap hardwareMap =  null;
 
     /* Constructor */
     public Robot() {
@@ -65,7 +73,7 @@ public class Robot {
     /* Initialize standard Hardware interfaces */
     public void init(HardwareMap hardwareMap) {
         // Save reference to Hardware map
-        hwMap = hardwareMap;
+        this.hardwareMap = hardwareMap;
 
         // Define and initialize all motors and servos
         motorLeft = hardwareMap.dcMotor.get("left_motor");
@@ -73,7 +81,7 @@ public class Robot {
         clawLifter = hardwareMap.dcMotor.get("clawLifter");
         leftClaw = hardwareMap.servo.get("clawLeft");
         rightClaw = hardwareMap.servo.get("clawRight");
-        relicHolder = hardwareMap.servo.get("relicHolder");
+//        relicHolder = hardwareMap.servo.get("relicHolder");
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
 
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -83,17 +91,40 @@ public class Robot {
         motorRight.setPower(0);
         clawLifter.setPower(0);
 
-        // Set wheel motors to run with encoders.
-        motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        // Set claw lifter to run without encoders.
-        clawLifter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         // Set the default position of all the servos.
-        relicHolder.setPosition(0.35);
+//        relicHolder.setPosition(0.35);
 
         jewelKnocker.setPosition(0);
     }
- }
+
+    void resetEncoders() {
+        motorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    void setUseEncodersMode() {
+        // Set wheel motors to run with encoders.
+        motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    void setRunToPositionMode() {
+        // Set wheel motors to run to position.
+        motorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    void driveForward(double power) {
+        motorLeft.setPower(power);
+        motorRight.setPower(power);
+    }
+
+    void stopDriving() {
+        driveForward(0);
+    }
+
+    boolean isBusy() {
+        return motorLeft.isBusy() && motorRight.isBusy();
+    }
+}
 

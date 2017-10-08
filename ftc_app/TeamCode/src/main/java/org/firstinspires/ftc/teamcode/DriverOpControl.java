@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by shreyas on 9/16/2017.
@@ -11,25 +9,13 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 @TeleOp (name = "Driver Op Control", group = "Driver Op")
 public class DriverOpControl extends LinearOpMode {
-    private DcMotor motorLeft;
-    private DcMotor motorRight;
-    private DcMotor clawLifter;
-
-    private Servo leftClaw;
-    private Servo rightClaw;
-    private Servo relicHolder;
+    Robot bot   = new Robot();
 
     @Override
     public void runOpMode() throws InterruptedException {
-        motorLeft = hardwareMap.dcMotor.get("left_motor");
-        motorRight = hardwareMap.dcMotor.get("right_motor");
-        clawLifter = hardwareMap.dcMotor.get("clawLifter");
-        leftClaw = hardwareMap.servo.get("clawLeft");
-        rightClaw = hardwareMap.servo.get("clawRight");
-        relicHolder = hardwareMap.servo.get("relicHolder");
-        relicHolder.setPosition(0.35);
-
-        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+         // Initialize the drive system variables.
+         // The init() method of the hardware class does all the work here
+        bot.init(hardwareMap);
 
         waitForStart();
 
@@ -62,8 +48,8 @@ public class DriverOpControl extends LinearOpMode {
             motion = "Backwards";
         }
 
-        motorLeft.setPower(leftPower);
-        motorRight.setPower(rightPower);
+        bot.motorLeft.setPower(leftPower);
+        bot.motorRight.setPower(rightPower);
 
         telemetry.addData("Motion", motion);
         telemetry.addData("Power", "Left: " + leftPower + " Right: " + rightPower);
@@ -75,27 +61,27 @@ public class DriverOpControl extends LinearOpMode {
         // The code to manage the claw goes here.
         //later, make it open a little less, so when drop the glyph in cryptobox, doesn't knock others off
         if(gamepad1.x){
-            leftClaw.setPosition(0.5);
-            rightClaw.setPosition(0);
+            bot.leftClaw.setPosition(0.5);
+            bot.rightClaw.setPosition(0);
         } else if (gamepad1.b){
-            leftClaw.setPosition(0.2);
-            rightClaw.setPosition(0.8);
+            bot.leftClaw.setPosition(0.2);
+            bot.rightClaw.setPosition(0.8);
         }
 
         if(gamepad1.y){
-            clawLifter.setPower(-0.5);
+            bot.clawLifter.setPower(-0.5);
         } else if(gamepad1.a){
-            clawLifter.setPower(0.5);
+            bot.clawLifter.setPower(0.5);
         } else {
-            clawLifter.setPower(0);
+            bot.clawLifter.setPower(0);
         }
     }
 
     private void manageRelicHolder() {
         if(gamepad2.x){
-            relicHolder.setPosition(0.8);
+            bot.relicHolder.setPosition(0.8);
         } else if(gamepad2.b){
-            relicHolder.setPosition(0.35);
+            bot.relicHolder.setPosition(0.35);
         }
     }
 }
