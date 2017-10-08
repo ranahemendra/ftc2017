@@ -144,6 +144,11 @@ public class Robot {
         motorRight.setPower(power);
     }
 
+    void turnLeft(double power) {
+        motorLeft.setPower( -1 * power);
+        motorRight.setPower(power);
+    }
+
     void stopDriving() {
         driveForward(0);
     }

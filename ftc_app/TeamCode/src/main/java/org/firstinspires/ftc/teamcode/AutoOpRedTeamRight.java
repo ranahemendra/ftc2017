@@ -75,16 +75,20 @@ public class AutoOpRedTeamRight extends LinearOpMode {
         //wait for the servo to move.
         sleep(1000);
 
-        int forwardInches = 10;
+        //move off the balancing stone
+        int forwardInches = 20;
         driveForwardDistance(forwardInches);
 
         // Now lift the arm back up.
         bot.resetJewelKnocker();
-        driveForwardDistance(forwardInches);
 
-//        while(opModeIsActive()){
-//
-//        }
+        //Turn Left a bit
+        if(scannedVuMark == RelicRecoveryVuMark.CENTER){
+            TurnLeftDistance(6);
+            forwardInches = 20;
+            driveForwardDistance(forwardInches);
+        }
+
     }
 
     void driveForwardDistance(int forwardInches) {
@@ -100,7 +104,34 @@ public class AutoOpRedTeamRight extends LinearOpMode {
 
             bot.setRunToPositionMode();
 
-            bot.driveForward(bot.AUTONOMOUS_DRIVE_SPEED);
+            bot.driveForward(bot.AUTONOMOUS_DRIVE_SPEED-0.2);
+
+            while (opModeIsActive() && bot.isBusy()) {
+                // Do nothing.
+                telemetry.addData("To", "%7d, %7d", newRightTarget, newLeftTarget);
+                telemetry.addData("At", "%7d, %7d", bot.motorRight.getCurrentPosition(), bot.motorLeft.getCurrentPosition());
+                telemetry.update();
+            }
+
+            bot.stopDriving();
+            bot.setUseEncoderMode();
+        }
+    }
+
+    void TurnLeftDistance(int forwardInches) {
+        int newRightTarget;
+        int newLeftTarget;
+
+        if (opModeIsActive()) {
+            newRightTarget = bot.motorRight.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
+            newLeftTarget = bot.motorLeft.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
+
+            bot.motorRight.setTargetPosition(newRightTarget);
+            bot.motorLeft.setTargetPosition(-1 * newLeftTarget);
+
+            bot.setRunToPositionMode();
+
+            bot.turnLeft(bot.AUTONOMOUS_DRIVE_SPEED-0.3);
 
             while (opModeIsActive() && bot.isBusy()) {
                 // Do nothing.
