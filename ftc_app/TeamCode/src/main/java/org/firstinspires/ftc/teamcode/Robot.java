@@ -41,12 +41,12 @@ import com.qualcomm.robotcore.hardware.Servo;
  * This hardware class assumes the device names have been configured on the robot:
  */
 public class Robot {
-    static final double COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: TETRIX Motor Encoder
-    static final double DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    static final double COUNTS_PER_MOTOR_REV    = 1120 ;    // eg: NeveRest Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
-    static final double AUTONOMOUS_DRIVE_SPEED  = 1;
+    static final double AUTONOMOUS_DRIVE_SPEED  = 0.5;
     static final double DRIVE_SPEED             = 0.1;
     static final double TURN_SPEED              = 0.5;
 
@@ -87,14 +87,12 @@ public class Robot {
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power
-        motorLeft.setPower(0);
-        motorRight.setPower(0);
-        clawLifter.setPower(0);
+        stopDriving();
+        resetClawLifter();
 
         // Set the default position of all the servos.
 //        relicHolder.setPosition(0.35);
-
-        jewelKnocker.setPosition(0);
+        resetJewelKnocker();
     }
 
     void resetEncoders() {
@@ -102,7 +100,7 @@ public class Robot {
         motorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    void setUseEncodersMode() {
+    void setUseEncoderMode() {
         // Set wheel motors to run with encoders.
         motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -125,6 +123,18 @@ public class Robot {
 
     boolean isBusy() {
         return motorLeft.isBusy() && motorRight.isBusy();
+    }
+
+    void resetJewelKnocker() {
+        jewelKnocker.setPosition(0);
+    }
+
+    void moveJewelKnockerDown() {
+        jewelKnocker.setPosition(0.6);
+    }
+
+    void resetClawLifter() {
+        clawLifter.setPower(0);
     }
 }
 

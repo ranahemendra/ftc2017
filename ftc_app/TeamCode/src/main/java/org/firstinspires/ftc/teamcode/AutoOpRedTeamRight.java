@@ -30,18 +30,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous(name = "Autonomous Op Red", group = "Autonomous")
-public class AutoOpRed extends LinearOpMode {
-    private Robot bot = new Robot();
-    private ElapsedTime runtime = new ElapsedTime();
+@Autonomous(name = "Auto Op Red Team Right", group = "Autonomous")
+public class AutoOpRedTeamRight extends LinearOpMode {
+    Robot bot = new Robot();
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -53,38 +48,32 @@ public class AutoOpRed extends LinearOpMode {
         bot.resetEncoders();
 
         // We will use encoders for driving distance.
-        bot.setUseEncodersMode();
+        bot.setUseEncoderMode();
 
         // wait for the start button to be pressed.
         waitForStart();
 
-        int forwardInches = 20;
+        bot.moveJewelKnockerDown();
+        // wait for the servo to move.
+        sleep(1000);
+
+        int forwardInches = 10;
         driveForwardDistance(forwardInches);
-//        turnRightDistance(power, distance);
-//        while (opModeIsActive()) {
-//            jewelKnocker.setPosition(0.6);
-              // Wait for servo to move.
-//            sleep(1000);
-//
-//            telemetry.addData("Jewel Knocker", "Position " + jewelKnocker.getPosition());
-//            telemetry.addData("Motor Left", "Position " + motorLeft.getCurrentPosition());
-//            telemetry.addData("Motor Right", "Position " + motorRight.getCurrentPosition());
-//            telemetry.update();
-//
-//            idle();
-//        }
+
+        // Now lift the arm back up.
+        bot.resetJewelKnocker();
     }
 
-    private void driveForwardDistance(int forwardInches) {
-        int newLeftTarget;
+    void driveForwardDistance(int forwardInches) {
         int newRightTarget;
+        int newLeftTarget;
 
         if (opModeIsActive()) {
+            newRightTarget = bot.motorRight.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
             newLeftTarget = bot.motorLeft.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
-            newRightTarget = bot.motorLeft.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
 
-            bot.motorLeft.setTargetPosition(newLeftTarget);
             bot.motorRight.setTargetPosition(newRightTarget);
+            bot.motorLeft.setTargetPosition(newLeftTarget);
 
             bot.setRunToPositionMode();
 
@@ -92,41 +81,13 @@ public class AutoOpRed extends LinearOpMode {
 
             while (opModeIsActive() && bot.isBusy()) {
                 // Do nothing.
-                telemetry.addData("To", "%7d, %7d", newLeftTarget, newRightTarget);
-                telemetry.addData("At", "%7d, %7d", bot.motorLeft.getCurrentPosition(), bot.motorRight.getCurrentPosition());
+                telemetry.addData("To", "%7d, %7d", newRightTarget, newLeftTarget);
+                telemetry.addData("At", "%7d, %7d", bot.motorRight.getCurrentPosition(), bot.motorLeft.getCurrentPosition());
                 telemetry.update();
             }
 
             bot.stopDriving();
-            bot.setUseEncodersMode();
+            bot.setUseEncoderMode();
         }
     }
-//
-//    private void turnRightDistance(double power, int distance) {
-//        bot.resetEncoders();
-//
-//        bot.motorLeft.setTargetPosition(-1 * distance);
-//        bot.motorRight.setTargetPosition(distance);
-//
-//        bot.runToPosition();
-//
-//        turnRight(power);
-//
-//        while (bot.motorLeft.isBusy() && bot.motorRight.isBusy()) {
-//            // Do nothing.
-//            telemetry.addData("Right Motor: ", bot.motorRight.getCurrentPosition());
-//            telemetry.addData("Left Motor: ", bot.motorLeft.getCurrentPosition());
-//            telemetry.update();
-//            idle();
-//        }
-//
-//        // stop and change mode back to normal.
-//        bot.stopDriving();
-//        bot.useEncoders();
-//    }
-//
-//    private void turnRight(double power) {
-//        bot.motorLeft.setPower(power);
-//        bot.motorRight.setPower(-1 * power);
-//    }
 }
