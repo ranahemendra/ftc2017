@@ -68,6 +68,7 @@ public class Robot {
     Servo leftClaw;
     Servo rightClaw;
 
+    DcMotor telescopicArmMotor;
     Servo relicHolder;
 
     Servo jewelKnocker;
@@ -93,6 +94,7 @@ public class Robot {
         leftClaw = hardwareMap.servo.get("clawLeft");
         rightClaw = hardwareMap.servo.get("clawRight");
 //        relicHolder = hardwareMap.servo.get("relicHolder");
+        telescopicArmMotor = hardwareMap.dcMotor.get("telescopic_arm_motor");
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
 
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -102,6 +104,7 @@ public class Robot {
         resetClawLifter();
 
         // Set the default position of all the servos.
+        resetTelescopicArmMotor();
 //        relicHolder.setPosition(0.35);
         resetJewelKnocker();
 
@@ -178,6 +181,10 @@ public class Robot {
 
     void resetClawLifter() {
         clawLifter.setPower(0);
+    }
+
+    void resetTelescopicArmMotor() {
+        telescopicArmMotor.setPower(0);
     }
 }
 
