@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -69,6 +70,7 @@ public class Robot {
     Servo rightClaw;
 
     DcMotor telescopicArmMotor;
+    CRServo relicArm;
     Servo relicHolder;
 
     Servo jewelKnocker;
@@ -83,7 +85,7 @@ public class Robot {
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap hardwareMap) {
+    public void init(HardwareMap hardwareMap) throws InterruptedException {
         // Save reference to Hardware map
         this.hardwareMap = hardwareMap;
 
@@ -95,6 +97,7 @@ public class Robot {
         rightClaw = hardwareMap.servo.get("clawRight");
 //        relicHolder = hardwareMap.servo.get("relicHolder");
         telescopicArmMotor = hardwareMap.dcMotor.get("telescopic_arm_motor");
+        relicArm = hardwareMap.crservo.get("relic_arm");
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
 
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -105,6 +108,7 @@ public class Robot {
 
         // Set the default position of all the servos.
         resetTelescopicArmMotor();
+        resetRelicArm();
 //        relicHolder.setPosition(0.35);
         resetJewelKnocker();
 
@@ -185,6 +189,27 @@ public class Robot {
 
     void resetTelescopicArmMotor() {
         telescopicArmMotor.setPower(0);
+    }
+
+
+        //initializing continuous rotation servo
+    void resetRelicArm() throws InterruptedException {
+        relicArm.setPower(-1);
+        Thread.sleep(500);
+        relicArmStop();
+    }
+
+        //Sets Relic Arm Power
+    void relicArmUp() {
+        relicArm.setPower(1);
+    }
+
+    void relicArmDown() {
+        relicArm.setPower(-1);
+    }
+
+    void relicArmStop() {
+        relicArm.setPower(0);
     }
 }
 
