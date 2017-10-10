@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -70,10 +71,12 @@ public class Robot {
     Servo rightClaw;
 
     DcMotor telescopicArmMotor;
-    CRServo relicArm;
+    Servo relicArm;
     Servo relicHolder;
 
     Servo jewelKnocker;
+
+    Telemetry telemetry;
 
 
     /* local OpMode members. */
@@ -85,9 +88,10 @@ public class Robot {
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap hardwareMap) throws InterruptedException {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) throws InterruptedException {
         // Save reference to Hardware map
         this.hardwareMap = hardwareMap;
+        this.telemetry = telemetry;
 
         // Define and initialize all motors and servos
         motorLeft = hardwareMap.dcMotor.get("left_motor");
@@ -97,7 +101,7 @@ public class Robot {
         rightClaw = hardwareMap.servo.get("clawRight");
 //        relicHolder = hardwareMap.servo.get("relicHolder");
         telescopicArmMotor = hardwareMap.dcMotor.get("telescopic_arm_motor");
-        relicArm = hardwareMap.crservo.get("relic_arm");
+        relicArm = hardwareMap.servo.get("relic_arm");
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
 
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -194,22 +198,22 @@ public class Robot {
 
         //initializing continuous rotation servo
     void resetRelicArm() throws InterruptedException {
-        relicArm.setPower(-1);
-        Thread.sleep(500);
-        relicArmStop();
+        relicArm.setPosition(0);
+        telemetry.addData("Relic Arm", relicArm.getPosition());
+        telemetry.update();
     }
 
         //Sets Relic Arm Power
-    void relicArmUp() {
-        relicArm.setPower(1);
+    void relicArmUp() throws InterruptedException {
+        double position = relicArm.getPosition();
+        relicArm.setPosition(position + 0.1);
+        Thread.sleep(100);
     }
 
-    void relicArmDown() {
-        relicArm.setPower(-1);
-    }
-
-    void relicArmStop() {
-        relicArm.setPower(0);
+    void relicArmDown() throws InterruptedException {
+        double position = relicArm.getPosition();
+        relicArm.setPosition(position - 0.1);
+        Thread.sleep(100);
     }
 }
 

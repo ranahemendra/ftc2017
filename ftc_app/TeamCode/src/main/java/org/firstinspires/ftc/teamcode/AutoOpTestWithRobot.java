@@ -44,7 +44,7 @@ public class AutoOpTestWithRobot extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         // Initialize the drive system variables.
         // The init() method of the hardware class does all the work here
-        bot.init(hardwareMap);
+        bot.init(hardwareMap, telemetry);
 
         // Reset the encoders.
         bot.resetEncoders();
