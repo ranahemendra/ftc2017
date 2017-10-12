@@ -15,16 +15,16 @@ public class DriverOpControl extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
          // Initialize the drive system variables.
          // The init() method of the hardware class does all the work here
-        bot.init(hardwareMap);
+        bot.init(hardwareMap, telemetry);
 
         waitForStart();
 
         while(opModeIsActive()){
             manageChassis();
             manageClaw();
-            moveRelicGrabber();
-            manageRelicHolder();
             manageTelescopicArm();
+            manageRelicArm();
+//            manageRelicHolder();
             idle();
         }
     }
@@ -53,10 +53,10 @@ public class DriverOpControl extends LinearOpMode {
         bot.motorLeft.setPower(leftPower);
         bot.motorRight.setPower(rightPower);
 
-        telemetry.addData("Motion", motion);
-        telemetry.addData("Power", "Left: " + leftPower + " Right: " + rightPower);
-        telemetry.addData("StickX", "Stick X Power " + leftStickX);
-        telemetry.update();
+//        telemetry.addData("Motion", motion);
+//        telemetry.addData("Power", "Left: " + leftPower + " Right: " + rightPower);
+//        telemetry.addData("StickX", "Stick X Power " + leftStickX);
+//        telemetry.update();
     }
 
     private void manageClaw() {
@@ -86,14 +86,21 @@ public class DriverOpControl extends LinearOpMode {
             bot.relicHolder.setPosition(0.35);
         }
     }
-    private void moveRelicGrabber(){
-        while(gamepad2.a){
-            bot.moveRelicGrabber();
-        }
 
-    }
     void manageTelescopicArm() {
         double power = gamepad2.right_trigger;
         bot.telescopicArmMotor.setPower(power);
+    }
+
+        //relic arm movement
+    private void manageRelicArm() throws InterruptedException {
+        if(gamepad2.y){
+            bot.relicArmUp();
+        } else if(gamepad2.a){
+            bot.relicArmDown();
+        }
+
+        telemetry.addData("Relic Arm", bot.relicArm.getPosition());
+        telemetry.update();
     }
 }

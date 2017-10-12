@@ -29,20 +29,14 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.Func;
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -69,9 +63,6 @@ public class Robot {
     VuforiaTrackables relicTrackables;
     VuforiaTrackable relicTemplate;
 
-    BNO055IMU imu;
-    Orientation angles;
-    Acceleration gravity;
     DcMotor motorLeft;
     DcMotor motorRight;
 
@@ -80,9 +71,12 @@ public class Robot {
     Servo rightClaw;
 
     DcMotor telescopicArmMotor;
+    Servo relicArm;
     Servo relicHolder;
-    Servo relicGrabber;
+
     Servo jewelKnocker;
+
+    Telemetry telemetry;
 
 
     /* local OpMode members. */
@@ -94,9 +88,10 @@ public class Robot {
     }
 
     /* Initialize standard Hardware interfaces */
-    public void init(HardwareMap hardwareMap) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry) throws InterruptedException {
         // Save reference to Hardware map
         this.hardwareMap = hardwareMap;
+        this.telemetry = telemetry;
 
         // Define and initialize all motors and servos
         motorLeft = hardwareMap.dcMotor.get("left_motor");
@@ -106,9 +101,9 @@ public class Robot {
         rightClaw = hardwareMap.servo.get("clawRight");
 //        relicHolder = hardwareMap.servo.get("relicHolder");
         telescopicArmMotor = hardwareMap.dcMotor.get("telescopic_arm_motor");
+        relicArm = hardwareMap.servo.get("relic_arm");
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
-        relicGrabber = hardwareMap.servo.get("relicGrabber");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power
@@ -117,6 +112,7 @@ public class Robot {
 
         // Set the default position of all the servos.
         resetTelescopicArmMotor();
+        resetRelicArm();
 //        relicHolder.setPosition(0.35);
         resetJewelKnocker();
 
@@ -198,24 +194,26 @@ public class Robot {
     void resetTelescopicArmMotor() {
         telescopicArmMotor.setPower(0);
     }
-    void calibrateGyro(){
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-    }
-    void gyroTurnLeft(double angle, double power){
-    }
-    void gyroTurnRight(double angle, double power){
 
+
+        //initializing continuous rotation servo
+    void resetRelicArm() throws InterruptedException {
+        relicArm.setPosition(0);
+        telemetry.addData("Relic Arm", relicArm.getPosition());
+        telemetry.update();
     }
-    void moveRelicGrabber(){
-        relicGrabber.setPosition(1);
+
+        //Sets Relic Arm Power
+    void relicArmUp() throws InterruptedException {
+        double position = relicArm.getPosition();
+        relicArm.setPosition(position + 0.1);
+        Thread.sleep(100);
+    }
+
+    void relicArmDown() throws InterruptedException {
+        double position = relicArm.getPosition();
+        relicArm.setPosition(position - 0.1);
+        Thread.sleep(100);
     }
 }
 
