@@ -22,6 +22,7 @@ public class DriverOpControl extends LinearOpMode {
         while(opModeIsActive()){
             manageChassis();
             manageClaw();
+            moveRelicGrabber();
             manageRelicHolder();
             manageTelescopicArm();
             idle();
@@ -85,7 +86,12 @@ public class DriverOpControl extends LinearOpMode {
             bot.relicHolder.setPosition(0.35);
         }
     }
+    private void moveRelicGrabber(){
+        while(gamepad2.a){
+            bot.moveRelicGrabber();
+        }
 
+    }
     void manageTelescopicArm() {
         double power = gamepad2.right_trigger;
         bot.telescopicArmMotor.setPower(power);
