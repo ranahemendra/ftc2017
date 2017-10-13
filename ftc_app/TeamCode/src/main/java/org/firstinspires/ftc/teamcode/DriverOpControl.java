@@ -25,50 +25,55 @@ public class DriverOpControl extends LinearOpMode {
             manageClaw();
             manageTelescopicArm();
             manageRelicArm();
-//            manageRelicHolder();
+            manageRelicHolder();
             idle();
             telemetry.update();
         }
     }
 
-    private void manageChassis() {
+    void manageChassis() {
         String motion = "Stop";
         double leftStickX = gamepad1.left_stick_x;
         double rightTrigger = gamepad1.right_trigger;
         double leftTrigger = gamepad1.left_trigger;
 
-        double leftPower = 0;
-        double rightPower = 0;
-
-        if (leftTrigger == 0 && rightTrigger != 0   ) {
-            // We are going forward.
-            leftPower = rightTrigger - (leftStickX > 0 ? -1 * leftStickX : 0);
-            rightPower = rightTrigger + (leftStickX < 0 ? -1 * leftStickX : 0);
-            motion = "Forward";
-        } else if (leftTrigger != 0 && rightTrigger == 0) {
-            // We are going backwards.
-            leftPower = -1 * leftTrigger + (leftStickX < 0 ? leftStickX : 0);
-            rightPower = -1 * leftTrigger - (leftStickX > 0 ? leftStickX : 0);
-            motion = "Backwards";
+        if(rightTrigger > 0 && leftTrigger > 0){
+            // Both triggers are pressed, don't do anything.
+            return;
         }
 
-        bot.motorLeft.setPower(leftPower);
-        bot.motorRight.setPower(rightPower);
+        if (rightTrigger == 0 && leftTrigger == 0 && leftStickX == 0) {
+            // Stop the robot and return.
+            bot.stopDriving();
+            return;
+        }
 
-        telemetry.addData("Motion", motion);
-        telemetry.addData("Power", "Left: " + leftPower + " Right: " + rightPower);
-        telemetry.addData("StickX", "Stick X Power " + leftStickX);
+        if (rightTrigger > 0) {
+            bot.driveForward(rightTrigger);
+        }
+
+        if (leftTrigger > 0) {
+            bot.driveBackward(leftTrigger);
+        }
+
+        if (leftStickX > 0) {
+            bot.turnRight(leftStickX);
+        }
+
+        if(leftStickX < 0){
+            bot.turnLeft(leftStickX);
+        }
+
+        telemetry.addData("DT: ", "LT: %7f, RT: %7f, Turn: %7f", leftTrigger, rightTrigger, leftStickX);
     }
 
-    private void manageClaw() {
+    void manageClaw() {
         // The code to manage the claw goes here.
         //later, make it open a little less, so when drop the glyph in cryptobox, doesn't knock others off
         if(gamepad1.x){
-            bot.leftClaw.setPosition(0.5);
-            bot.rightClaw.setPosition(0);
+            bot.clampGlyphHolder();
         } else if (gamepad1.b){
-            bot.leftClaw.setPosition(0.2);
-            bot.rightClaw.setPosition(0.8);
+            bot.resetGlyphHolder();
         }
 
         if(gamepad1.y){
@@ -80,27 +85,27 @@ public class DriverOpControl extends LinearOpMode {
         }
     }
 
-    private void manageRelicHolder() {
-        if(gamepad2.x){
-            bot.relicHolder.setPosition(0.8);
-        } else if(gamepad2.b){
-            bot.relicHolder.setPosition(0.35);
-        }
-    }
-
     void manageTelescopicArm() {
         double power = gamepad2.right_trigger;
         bot.telescopicArmMotor.setPower(power);
     }
 
         //relic arm movement
-    private void manageRelicArm() throws InterruptedException {
+    void manageRelicArm() throws InterruptedException {
         if(gamepad2.y){
             bot.relicArmUp();
         } else if(gamepad2.a){
             bot.relicArmDown();
         }
+    }
 
-        telemetry.addData("Relic Arm", bot.relicArm.getPosition());
+    void manageRelicHolder() throws InterruptedException {
+        if(gamepad2.x){
+            bot.grabRelic();
+        } else if(gamepad2.b){
+            bot.releaseRelic();
+        } else {
+            bot.stopRelicHolder();
+        }
     }
 }

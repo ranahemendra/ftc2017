@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.vuforia.Vuforia;
@@ -72,7 +73,7 @@ public class Robot {
 
     DcMotor telescopicArmMotor;
     Servo relicArm;
-    Servo relicHolder;
+    CRServo relicHolder;
 
     Servo jewelKnocker;
 
@@ -99,21 +100,24 @@ public class Robot {
         clawLifter = hardwareMap.dcMotor.get("clawLifter");
         leftClaw = hardwareMap.servo.get("clawLeft");
         rightClaw = hardwareMap.servo.get("clawRight");
-//        relicHolder = hardwareMap.servo.get("relicHolder");
         telescopicArmMotor = hardwareMap.dcMotor.get("telescopic_arm_motor");
         relicArm = hardwareMap.servo.get("relic_arm");
+        relicHolder = hardwareMap.crservo.get("relic_holder");
+
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
 
-        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+//        motorLeft.setDirection(DcMotor.Direction.REVERSE);
 
         // Set all motors to zero power
         stopDriving();
         resetClawLifter();
+        resetGlyphHolder();
 
         // Set the default position of all the servos.
         resetTelescopicArmMotor();
         resetRelicArm();
-//        relicHolder.setPosition(0.35);
+        stopRelicHolder();
+
         resetJewelKnocker();
 
         initVuforia();
@@ -151,12 +155,27 @@ public class Robot {
     }
 
     void driveForward(double power) {
+        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+        motorRight.setDirection(DcMotor.Direction.FORWARD);
         motorLeft.setPower(power);
         motorRight.setPower(power);
     }
 
+    void driveBackward(double power) {
+        driveForward(-power);
+    }
+
     void turnLeft(double power) {
-        motorLeft.setPower( -1 * power);
+        motorLeft.setDirection(DcMotor.Direction.FORWARD);
+        motorRight.setDirection(DcMotor.Direction.FORWARD);
+        motorLeft.setPower(-power);
+        motorRight.setPower(-power);
+    }
+
+    void turnRight(double power) {
+        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+        motorRight.setDirection(DcMotor.Direction.REVERSE);
+        motorLeft.setPower(power);
         motorRight.setPower(power);
     }
 
@@ -176,8 +195,13 @@ public class Robot {
         jewelKnocker.setPosition(0.6);
     }
 
+    void resetGlyphHolder() {
+        leftClaw.setPosition(0);
+        rightClaw.setPosition(1);
+    }
+
     void clampGlyphHolder() {
-        leftClaw.setPosition(0.5);
+        leftClaw.setPosition(1);
         rightClaw.setPosition(0);
     }
 
@@ -216,6 +240,20 @@ public class Robot {
             relicArm.setPosition(position - 0.05);
             Thread.sleep(50);
         }
+    }
+
+    void stopRelicHolder() {
+        relicHolder.setPower(0);
+    }
+
+    void grabRelic()throws InterruptedException{
+        relicHolder.setPower(0.5);
+        Thread.sleep(50);
+    }
+
+    void releaseRelic()throws InterruptedException{
+        relicHolder.setPower(-0.5);
+        Thread.sleep(50);
     }
 }
 
