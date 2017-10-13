@@ -76,18 +76,17 @@ public class DriverOpControl extends LinearOpMode {
             bot.resetGlyphHolder();
         }
 
-        if(gamepad1.y){
-            bot.clawLifter.setPower(-0.5);
+        if(gamepad1.y) {
+            bot.moveClawLifterUp(bot.CLAW_SPEED);
         } else if(gamepad1.a){
-            bot.clawLifter.setPower(0.5);
+            bot.moveClawLifterDown(bot.CLAW_SPEED);
         } else {
-            bot.clawLifter.setPower(0);
+            bot.resetClawLifter();
         }
     }
 
     void manageTelescopicArm() {
-        double power = gamepad2.right_trigger;
-        bot.telescopicArmMotor.setPower(power);
+        bot.extendTelescopicArm(gamepad2.right_trigger);
     }
 
         //relic arm movement

@@ -31,10 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -42,7 +39,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 
 @Autonomous(name = "Auto Op Red Team Right", group = "Autonomous")
@@ -63,7 +59,10 @@ public class AutoOpRedTeamRight extends LinearOpMode {
 
         // Hold glyph.
         bot.clampGlyphHolder();
-        bot.moveClawLifterUp(0.5);
+        bot.moveClawLifterUp(bot.CLAW_SPEED);
+        Thread.sleep((long)(time * 1000));
+        bot.resetClawLifter();
+
 
         // wait for the start button to be pressed.
         waitForStart();
@@ -104,7 +103,7 @@ public class AutoOpRedTeamRight extends LinearOpMode {
 
             bot.setRunToPositionMode();
 
-            bot.driveForward(bot.AUTONOMOUS_DRIVE_SPEED-0.2);
+            bot.driveForward(bot.DRIVE_SPEED -0.2);
 
             while (opModeIsActive() && bot.isBusy()) {
                 // Do nothing.
@@ -131,7 +130,7 @@ public class AutoOpRedTeamRight extends LinearOpMode {
 
             bot.setRunToPositionMode();
 
-            bot.turnLeft(bot.AUTONOMOUS_DRIVE_SPEED-0.3);
+            bot.turnLeft(bot.DRIVE_SPEED -0.3);
 
             while (opModeIsActive() && bot.isBusy()) {
                 // Do nothing.

@@ -31,14 +31,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
@@ -56,8 +53,9 @@ public class Robot {
     static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
-    static final double AUTONOMOUS_DRIVE_SPEED  = 0.5;
-    static final double DRIVE_SPEED             = 0.1;
+    static final double DRIVE_SPEED             = 0.5;
+    static final double CLAW_SPEED              = 0.5;
+    static final double TELESCOPIC_ARM_SPEED    = 0.5;
     static final double TURN_SPEED              = 0.5;
 
     VuforiaLocalizer vuforia;
@@ -114,7 +112,7 @@ public class Robot {
         resetGlyphHolder();
 
         // Set the default position of all the servos.
-        resetTelescopicArmMotor();
+        resetTelescopicArm();
         resetRelicArm();
         stopRelicHolder();
 
@@ -195,6 +193,18 @@ public class Robot {
         jewelKnocker.setPosition(0.6);
     }
 
+    void moveClawLifterUp(double power) {
+        clawLifter.setPower(power);
+    }
+
+    void moveClawLifterDown(double power) {
+        clawLifter.setPower(-1 * power);
+    }
+
+    void resetClawLifter() {
+        clawLifter.setPower(0);
+    }
+
     void resetGlyphHolder() {
         leftClaw.setPosition(0);
         rightClaw.setPosition(1);
@@ -205,18 +215,12 @@ public class Robot {
         rightClaw.setPosition(0);
     }
 
-    void moveClawLifterUp(double time) throws InterruptedException {
-        clawLifter.setPower(AUTONOMOUS_DRIVE_SPEED);
-        Thread.sleep((long)(time * 1000));
-        resetClawLifter();
-    }
-
-    void resetClawLifter() {
-        clawLifter.setPower(0);
-    }
-
-    void resetTelescopicArmMotor() {
+    void resetTelescopicArm() {
         telescopicArmMotor.setPower(0);
+    }
+
+    void extendTelescopicArm(double power) {
+        telescopicArmMotor.setPower(power);
     }
 
     // Initializing continuous rotation servo

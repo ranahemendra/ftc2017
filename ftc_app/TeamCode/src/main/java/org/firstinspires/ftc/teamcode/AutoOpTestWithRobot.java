@@ -32,8 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous(name = "Auto Op Test", group = "Autonomous")
 @Disabled
@@ -76,7 +74,7 @@ public class AutoOpTestWithRobot extends LinearOpMode {
 
             bot.setRunToPositionMode();
 
-            bot.driveForward(bot.AUTONOMOUS_DRIVE_SPEED);
+            bot.driveForward(bot.DRIVE_SPEED);
 
             while (opModeIsActive() && bot.isBusy()) {
                 // Do nothing.
