@@ -195,25 +195,27 @@ public class Robot {
         telescopicArmMotor.setPower(0);
     }
 
-
-        //initializing continuous rotation servo
+    // Initializing continuous rotation servo
     void resetRelicArm() throws InterruptedException {
         relicArm.setPosition(0);
         telemetry.addData("Relic Arm", relicArm.getPosition());
-        telemetry.update();
     }
 
-        //Sets Relic Arm Power
+    // Sets Relic Arm Power
     void relicArmUp() throws InterruptedException {
         double position = relicArm.getPosition();
-        relicArm.setPosition(position + 0.1);
-        Thread.sleep(100);
+        if(position < 1){
+            relicArm.setPosition(position + 0.05);
+            Thread.sleep(50);
+        }
     }
 
     void relicArmDown() throws InterruptedException {
         double position = relicArm.getPosition();
-        relicArm.setPosition(position - 0.1);
-        Thread.sleep(100);
+        if(position > 0){
+            relicArm.setPosition(position - 0.05);
+            Thread.sleep(50);
+        }
     }
 }
 

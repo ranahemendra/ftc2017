@@ -16,6 +16,7 @@ public class DriverOpControl extends LinearOpMode {
          // Initialize the drive system variables.
          // The init() method of the hardware class does all the work here
         bot.init(hardwareMap, telemetry);
+        telemetry.update();
 
         waitForStart();
 
@@ -26,6 +27,7 @@ public class DriverOpControl extends LinearOpMode {
             manageRelicArm();
 //            manageRelicHolder();
             idle();
+            telemetry.update();
         }
     }
 
@@ -53,10 +55,9 @@ public class DriverOpControl extends LinearOpMode {
         bot.motorLeft.setPower(leftPower);
         bot.motorRight.setPower(rightPower);
 
-//        telemetry.addData("Motion", motion);
-//        telemetry.addData("Power", "Left: " + leftPower + " Right: " + rightPower);
-//        telemetry.addData("StickX", "Stick X Power " + leftStickX);
-//        telemetry.update();
+        telemetry.addData("Motion", motion);
+        telemetry.addData("Power", "Left: " + leftPower + " Right: " + rightPower);
+        telemetry.addData("StickX", "Stick X Power " + leftStickX);
     }
 
     private void manageClaw() {
@@ -101,6 +102,5 @@ public class DriverOpControl extends LinearOpMode {
         }
 
         telemetry.addData("Relic Arm", bot.relicArm.getPosition());
-        telemetry.update();
     }
 }
