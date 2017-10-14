@@ -82,12 +82,11 @@ public class AutoOpRedTeamRight extends LinearOpMode {
         bot.resetJewelKnocker();
 
         //Turn Left a bit
-        if(scannedVuMark == RelicRecoveryVuMark.CENTER){
+        if (scannedVuMark == RelicRecoveryVuMark.CENTER){
             TurnLeftDistance(6);
             forwardInches = 20;
             driveForwardDistance(forwardInches);
         }
-
     }
 
     void driveForwardDistance(int forwardInches) {
