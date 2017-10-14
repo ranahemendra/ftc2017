@@ -74,7 +74,7 @@ public class DriverOpControl extends LinearOpMode {
         if(gamepad1.x){
             bot.clampGlyphHolder();
         } else if (gamepad1.b){
-            bot.resetGlyphHolder();
+            bot.unclampGlyphHolder();
         }
 
         if(gamepad1.y) {

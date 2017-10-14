@@ -30,39 +30,15 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 
 @Autonomous(name = "Auto Op Red Team Right", group = "Autonomous")
-public class AutoOpRedTeamRight extends LinearOpMode {
-    Robot bot = new Robot();
+public class AutoOpRedTeamRight extends AutoOpBase {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        // Initialize the drive system variables.
-        // The init() method of the hardware class does all the work here
-        bot.init(hardwareMap, telemetry);
-
-        // Reset the encoders.
-        bot.resetEncoders();
-
-        // We will use encoders for driving distance.
-        bot.setUseEncoderMode();
-
-        // Hold glyph.
-        bot.clampGlyphHolder();
-        bot.moveClawLifterUp(bot.CLAW_SPEED);
-        Thread.sleep((long)(time * 1000));
-        bot.resetClawLifter();
-
+        initBot();
 
         // wait for the start button to be pressed.
         waitForStart();
@@ -82,105 +58,23 @@ public class AutoOpRedTeamRight extends LinearOpMode {
         bot.resetJewelKnocker();
 
         //Turn Left a bit
-        if (scannedVuMark == RelicRecoveryVuMark.CENTER){
-            TurnLeftDistance(6);
-            forwardInches = 20;
-            driveForwardDistance(forwardInches);
+        turnLeftToAngle(270);
+        int driveDistance = 0;
+        switch (scannedVuMark) {
+            case LEFT:
+                driveDistance = 26;
+                break;
+            case CENTER:
+                driveDistance = 20;
+                break;
+            case RIGHT:
+                driveDistance = 14;
+                break;
         }
-    }
+        driveForwardDistance(driveDistance);
+        turnRightToAngle(0);
 
-    void driveForwardDistance(int forwardInches) {
-        int newRightTarget;
-        int newLeftTarget;
-
-        if (opModeIsActive()) {
-            newRightTarget = bot.motorRight.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
-            newLeftTarget = bot.motorLeft.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
-
-            bot.motorRight.setTargetPosition(newRightTarget);
-            bot.motorLeft.setTargetPosition(newLeftTarget);
-
-            bot.setRunToPositionMode();
-
-            bot.driveForward(bot.DRIVE_SPEED -0.2);
-
-            while (opModeIsActive() && bot.isBusy()) {
-                // Do nothing.
-                telemetry.addData("To", "%7d, %7d", newRightTarget, newLeftTarget);
-                telemetry.addData("At", "%7d, %7d", bot.motorRight.getCurrentPosition(), bot.motorLeft.getCurrentPosition());
-                telemetry.update();
-            }
-
-            bot.stopDriving();
-            bot.setUseEncoderMode();
-        }
-    }
-
-    void TurnLeftDistance(int forwardInches) {
-        int newRightTarget;
-        int newLeftTarget;
-
-        if (opModeIsActive()) {
-            newRightTarget = bot.motorRight.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
-            newLeftTarget = bot.motorLeft.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
-
-            bot.motorRight.setTargetPosition(newRightTarget);
-            bot.motorLeft.setTargetPosition(-1 * newLeftTarget);
-
-            bot.setRunToPositionMode();
-
-            bot.turnLeft(bot.DRIVE_SPEED -0.3);
-
-            while (opModeIsActive() && bot.isBusy()) {
-                // Do nothing.
-                telemetry.addData("To", "%7d, %7d", newRightTarget, newLeftTarget);
-                telemetry.addData("At", "%7d, %7d", bot.motorRight.getCurrentPosition(), bot.motorLeft.getCurrentPosition());
-                telemetry.update();
-            }
-
-            bot.stopDriving();
-            bot.setUseEncoderMode();
-        }
-    }
-
-    RelicRecoveryVuMark scanVumarks() {
-        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(bot.relicTemplate);
-        while (opModeIsActive() && vuMark == RelicRecoveryVuMark.UNKNOWN) {
-            vuMark = RelicRecoveryVuMark.from(bot.relicTemplate);
-            idle();
-        }
-
-        if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-            telemetry.addData("VuMark", "%s visible", vuMark);
-
-            OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) bot.relicTemplate.getListener()).getPose();
-            telemetry.addData("Pose", format(pose));
-
-            /* We further illustrate how to decompose the pose into useful rotational and
-             * translational components */
-            if (pose != null) {
-                VectorF trans = pose.getTranslation();
-                Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-
-                // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                double tX = trans.get(0);
-                double tY = trans.get(1);
-                double tZ = trans.get(2);
-
-                // Extract the rotational components of the target relative to the robot
-                double rX = rot.firstAngle;
-                double rY = rot.secondAngle;
-                double rZ = rot.thirdAngle;
-
-            }
-        } else {
-            telemetry.addData("VuMark", "not visible");
-        }
-
-        telemetry.update();
-        return vuMark;
-    }
-    String format(OpenGLMatrix transformationMatrix) {
-        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
+        // Drive forward.
+        bot.unclampGlyphHolder();
     }
 }
