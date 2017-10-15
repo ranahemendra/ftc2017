@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -77,7 +78,34 @@ public abstract class AutoOpBase extends LinearOpMode {
 
             bot.setRunToPositionMode();
 
-            bot.driveForward(bot.DRIVE_SPEED -0.2);
+            bot.driveForward(bot.DRIVE_SPEED);
+
+            while (opModeIsActive() && bot.isBusy()) {
+                // Do nothing.
+                telemetry.addData("To", "%7d, %7d", newRightTarget, newLeftTarget);
+                telemetry.addData("At", "%7d, %7d", bot.motorRight.getCurrentPosition(), bot.motorLeft.getCurrentPosition());
+                telemetry.update();
+            }
+
+            bot.stopDriving();
+            bot.setUseEncoderMode();
+        }
+    }
+
+    void driveBackwardDistance(int backwardInches) {
+        int newRightTarget;
+        int newLeftTarget;
+
+        if (opModeIsActive()) {
+            newRightTarget = bot.motorRight.getCurrentPosition() + (int)(backwardInches * bot.COUNTS_PER_INCH);
+            newLeftTarget = bot.motorLeft.getCurrentPosition() + (int)(backwardInches * bot.COUNTS_PER_INCH);
+
+            bot.motorRight.setTargetPosition(newRightTarget);
+            bot.motorLeft.setTargetPosition(newLeftTarget);
+
+            bot.setRunToPositionMode();
+
+            bot.driveBackward(bot.DRIVE_SPEED);
 
             while (opModeIsActive() && bot.isBusy()) {
                 // Do nothing.
@@ -258,5 +286,15 @@ public abstract class AutoOpBase extends LinearOpMode {
 
     String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
+    }
+
+    boolean isLeftJewelRed() {
+        ColorSensor sensor = bot.getColorSensorOutput();
+
+        if (sensor.red() > sensor.blue()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

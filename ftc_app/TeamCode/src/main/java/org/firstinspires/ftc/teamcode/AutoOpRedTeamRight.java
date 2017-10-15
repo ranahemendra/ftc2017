@@ -50,6 +50,19 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         //wait for the servo to move.
         sleep(1000);
 
+        telemetry.addData("Color", "Left Red: " + isLeftJewelRed());
+//
+//        if (isLeftJewelRed()) {
+//            // move forward
+//            driveForwardDistance(3);
+//            bot.resetJewelKnocker();
+//            driveBackwardDistance(3);
+//        } else {
+//            driveBackwardDistance(3);
+//            bot.resetJewelKnocker();
+//            driveForwardDistance(3);
+//        }
+
         //move off the balancing stone
         int forwardInches = 20;
         driveForwardDistance(forwardInches);
