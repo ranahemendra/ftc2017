@@ -353,7 +353,7 @@ public class Robot {
             // Acquiring the angles is relatively expensive; we don't want
             // to do that in each of the three items that need that info, as that's
             // three times the necessary expense.
-            angles   = getNewAngles();
+            angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             gravity  = getNewGravity();
         }
         });
@@ -428,8 +428,8 @@ public class Robot {
         return sensorColor;
     }
 
-    public Orientation getNewAngles() {
-        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    public float getCurrentAngle() {
+        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
     public Acceleration getNewGravity() {

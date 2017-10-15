@@ -59,6 +59,11 @@ public abstract class AutoOpBase extends LinearOpMode {
 
         // Hold glyph.
         bot.clampGlyphHolder();
+
+        //lift it up slightly
+        bot.moveClawLifterUp(0.5);
+        Thread.sleep(2000);
+        bot.moveClawLifterUp(0);
     }
 
     void driveForwardDistance(int forwardInches, double driveSpeed) {
@@ -139,14 +144,14 @@ public abstract class AutoOpBase extends LinearOpMode {
      * @param targetAngle
      */
     void turnLeftToAngle(double targetAngle) {
-        Orientation angles = bot.getNewAngles();
-        if (targetAngle == angles.firstAngle) {
+        float currentAngle = bot.getCurrentAngle();
+        if (targetAngle == currentAngle) {
             // Nothing to do.
             return;
         }
 
         // Check if the target angle is to the left of current angle
-        if (targetAngle > angles.firstAngle) {
+        if (targetAngle > currentAngle) {
             turnLeftToAngleLocal(targetAngle);
         } else {
             // We will be crossing over the 180 mark.
@@ -163,15 +168,15 @@ public abstract class AutoOpBase extends LinearOpMode {
     }
 
     void turnLeftToAngleLocal(double targetAngle) {
-        Orientation angles = bot.getNewAngles();
-        if (opModeIsActive() && angles.firstAngle < targetAngle) {
+        float currentAngle = bot.getCurrentAngle();
+        if (opModeIsActive() && currentAngle < targetAngle) {
             bot.autoOpTurnLeft(bot.AUTO_TURN_SPEED_SLOW);
         }
 
-        while (opModeIsActive() && targetAngle > angles.firstAngle) {
+        while (opModeIsActive() && targetAngle > currentAngle) {
             // Keep turning.
-            angles = bot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            telemetry.addData("Angle", angles.firstAngle);
+            currentAngle = bot.getCurrentAngle();
+            telemetry.addData("Angle", currentAngle);
             telemetry.update();
         }
 
@@ -183,14 +188,14 @@ public abstract class AutoOpBase extends LinearOpMode {
      * @param targetAngle
      */
     void turnRightToAngle(double targetAngle) {
-        Orientation angles = bot.getNewAngles();
-        if (targetAngle == angles.firstAngle) {
+        float currentAngle = bot.getCurrentAngle();
+        if (targetAngle == currentAngle) {
             // Nothing to do.
             return;
         }
 
         // Check if the target angle is to the left of current angle
-        if (targetAngle < angles.firstAngle) {
+        if (targetAngle < currentAngle) {
             turnRightToAngleLocal(targetAngle);
         } else {
             // We will be crossing over the 180 mark.
@@ -207,15 +212,15 @@ public abstract class AutoOpBase extends LinearOpMode {
     }
 
     void turnRightToAngleLocal(double targetAngle) {
-        Orientation angles = bot.getNewAngles();
-        if (opModeIsActive() && targetAngle < angles.firstAngle ) {
+        float currentAngles = bot.getCurrentAngle();
+        if (opModeIsActive() && targetAngle < currentAngles ) {
             bot.turnRight(bot.AUTO_TURN_SPEED_SLOW);
         }
 
-        while (opModeIsActive() && targetAngle < angles.firstAngle) {
+        while (opModeIsActive() && targetAngle < currentAngles) {
             // Keep turning.
-            angles = bot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            telemetry.addData("Angle", angles.firstAngle);
+            currentAngles = bot.getCurrentAngle();
+            telemetry.addData("Angle", currentAngles);
             telemetry.update();
         }
 
