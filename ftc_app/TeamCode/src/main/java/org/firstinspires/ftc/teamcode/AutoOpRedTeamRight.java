@@ -30,6 +30,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
@@ -42,52 +44,53 @@ public class AutoOpRedTeamRight extends AutoOpBase {
 
         // wait for the start button to be pressed.
         waitForStart();
-
-        bot.relicTrackables.activate();
-        RelicRecoveryVuMark scannedVuMark = scanVumarks();
-
+//
+//        bot.relicTrackables.activate();
+//        RelicRecoveryVuMark scannedVuMark = scanVumarks(1);
+//
         bot.moveJewelKnockerDown();
         //wait for the servo to move.
-        sleep(1000);
+        sleep(500);
 
+
+        boolean leftJewelRed = isLeftJewelRed();
         telemetry.addData("Color", "Left Red: " + isLeftJewelRed());
-//
-//        if (isLeftJewelRed()) {
-//            // move forward
-//            driveForwardDistance(3);
-//            bot.resetJewelKnocker();
-//            driveBackwardDistance(3);
-//        } else {
-//            driveBackwardDistance(3);
-//            bot.resetJewelKnocker();
-//            driveForwardDistance(3);
-//        }
-
-        //move off the balancing stone
-        int forwardInches = 20;
-        driveForwardDistance(forwardInches);
-
-        // Now lift the arm back up.
-        bot.resetJewelKnocker();
-
-        //Turn Left a bit
-        turnLeftToAngle(270);
-        int driveDistance = 0;
-        switch (scannedVuMark) {
-            case LEFT:
-                driveDistance = 26;
-                break;
-            case CENTER:
-                driveDistance = 20;
-                break;
-            case RIGHT:
-                driveDistance = 14;
-                break;
+        if (leftJewelRed) {
+            // move forward
+            driveForwardDistance(18, bot.AUTO_DRIVE_SPEED_SLOW);
+            bot.resetJewelKnocker();
+        } else {
+            driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
+            bot.resetJewelKnocker();
+            driveForwardDistance(21, bot.AUTO_DRIVE_SPEED_SLOW);
         }
-        driveForwardDistance(driveDistance);
-        turnRightToAngle(0);
 
-        // Drive forward.
-        bot.unclampGlyphHolder();
+//        sleep(2000);
+
+        // Turn left by 90 degrees.
+        // turnLeftToAngle(90);
+
+        while (opModeIsActive()) {
+            // Keep this going.
+            idle();
+        }
+
+//        int driveDistance = 0;
+//        switch (scannedVuMark) {
+//            case LEFT:
+//                driveDistance = 26;
+//                break;
+//            case CENTER:
+//                driveDistance = 20;
+//                break;
+//            case RIGHT:
+//                driveDistance = 14;
+//                break;
+//        }
+//        driveForwardDistance(driveDistance);
+//        turnRightToAngle(0);
+//
+//        // Drive forward.
+//        bot.unclampGlyphHolder();
     }
 }

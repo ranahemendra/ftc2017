@@ -48,7 +48,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -69,10 +68,12 @@ public class Robot {
     static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
-    static final double DRIVE_SPEED             = 0.5;
+    static final double AUTO_DRIVE_SPEED_SLOW   = 0.2;
+    static final double AUTO_DRIVE_SPEED_NORMAL = 0.5;
     static final double CLAW_SPEED              = 0.5;
     static final double TELESCOPIC_ARM_SPEED    = 0.5;
-    static final double TURN_SPEED              = 0.1;
+    static final double AUTO_TURN_SPEED_SLOW    = 0.05;
+    static final double AUTO_TURN_SPEED_NORMAL  = 0.3;
 
     VuforiaLocalizer vuforia;
     VuforiaTrackables relicTrackables;
@@ -152,19 +153,12 @@ public class Robot {
         stopRelicHolder();
 
         resetJewelKnocker();
-        setupColorSensor();
+        initColorSensor();
 
         initGyro();
     }
 
-    private void setupColorSensor() {
-
-
-        // values is a reference to the hsvValues array.
-        final float values[] = hsvValues;
-
-
-
+    private void initColorSensor() {
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
@@ -203,8 +197,11 @@ public class Robot {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
+        angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        gravity  = imu.getGravity();
+
         // Set up our telemetry dashboard
-        composeTelemetry();
+//        composeTelemetry();
     }
 
     void resetEncoders() {
@@ -233,6 +230,10 @@ public class Robot {
 
     void driveBackward(double power) {
         driveForward(-power);
+//        motorLeft.setDirection(DcMotor.Direction.FORWARD);
+//        motorRight.setDirection(DcMotor.Direction.REVERSE);
+//        motorLeft.setPower(power);
+//        motorRight.setPower(power);
     }
 
     void turnLeft(double power) {
@@ -240,6 +241,13 @@ public class Robot {
         motorRight.setDirection(DcMotor.Direction.FORWARD);
         motorLeft.setPower(-power);
         motorRight.setPower(-power);
+    }
+
+    void autoOpTurnLeft(double power) {
+        motorLeft.setDirection(DcMotor.Direction.FORWARD);
+        motorRight.setDirection(DcMotor.Direction.FORWARD);
+        motorLeft.setPower(power);
+        motorRight.setPower(power);
     }
 
     void turnRight(double power) {
@@ -262,7 +270,7 @@ public class Robot {
     }
 
     void moveJewelKnockerDown() {
-        jewelKnocker.setPosition(0.6);
+        jewelKnocker.setPosition(0.8);
     }
 
     void moveClawLifterUp(double power) {
@@ -338,7 +346,6 @@ public class Robot {
     }
 
     void composeTelemetry() {
-
         // At the beginning of each telemetry update, grab a bunch of data
         // from the IMU that we will then display in separate lines.
         telemetry.addAction(new Runnable() { @Override public void run()
@@ -346,8 +353,8 @@ public class Robot {
             // Acquiring the angles is relatively expensive; we don't want
             // to do that in each of the three items that need that info, as that's
             // three times the necessary expense.
-            angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            gravity  = imu.getGravity();
+            angles   = getNewAngles();
+            gravity  = getNewGravity();
         }
         });
 
@@ -418,23 +425,15 @@ public class Robot {
                 (int) (sensorColor.blue() * SCALE_FACTOR),
                 hsvValues);
 
-        // send the info back to driver station using telemetry function.
-        telemetry.addData("Alpha", sensorColor.alpha());
-        telemetry.addData("Red  ", sensorColor.red());
-        telemetry.addData("Green", sensorColor.green());
-        telemetry.addData("Blue ", sensorColor.blue());
-        telemetry.addData("Hue", hsvValues[0]);
-
-        // change the background color to match the color detected by the RGB sensor.
-        // pass a reference to the hue, saturation, and value array as an argument
-        // to the HSVToColor method.
-        relativeLayout.post(new Runnable() {
-            public void run() {
-                relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, hsvValues));
-            }
-        });
-
         return sensorColor;
+    }
+
+    public Orientation getNewAngles() {
+        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    }
+
+    public Acceleration getNewGravity() {
+        return imu.getGravity();
     }
 }
 

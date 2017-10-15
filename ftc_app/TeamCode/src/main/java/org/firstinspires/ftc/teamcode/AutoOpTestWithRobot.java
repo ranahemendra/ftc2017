@@ -74,7 +74,7 @@ public class AutoOpTestWithRobot extends LinearOpMode {
 
             bot.setRunToPositionMode();
 
-            bot.driveForward(bot.DRIVE_SPEED);
+            bot.driveForward(bot.AUTO_DRIVE_SPEED_NORMAL);
 
             while (opModeIsActive() && bot.isBusy()) {
                 // Do nothing.

@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
@@ -60,12 +59,9 @@ public abstract class AutoOpBase extends LinearOpMode {
 
         // Hold glyph.
         bot.clampGlyphHolder();
-        bot.moveClawLifterUp(bot.CLAW_SPEED);
-        Thread.sleep((long)(time * 1000));
-        bot.resetClawLifter();
     }
 
-    void driveForwardDistance(int forwardInches) {
+    void driveForwardDistance(int forwardInches, double driveSpeed) {
         int newRightTarget;
         int newLeftTarget;
 
@@ -78,13 +74,10 @@ public abstract class AutoOpBase extends LinearOpMode {
 
             bot.setRunToPositionMode();
 
-            bot.driveForward(bot.DRIVE_SPEED);
+            bot.driveForward(driveSpeed);
 
             while (opModeIsActive() && bot.isBusy()) {
                 // Do nothing.
-                telemetry.addData("To", "%7d, %7d", newRightTarget, newLeftTarget);
-                telemetry.addData("At", "%7d, %7d", bot.motorRight.getCurrentPosition(), bot.motorLeft.getCurrentPosition());
-                telemetry.update();
             }
 
             bot.stopDriving();
@@ -92,31 +85,29 @@ public abstract class AutoOpBase extends LinearOpMode {
         }
     }
 
-    void driveBackwardDistance(int backwardInches) {
-        int newRightTarget;
-        int newLeftTarget;
-
-        if (opModeIsActive()) {
-            newRightTarget = bot.motorRight.getCurrentPosition() + (int)(backwardInches * bot.COUNTS_PER_INCH);
-            newLeftTarget = bot.motorLeft.getCurrentPosition() + (int)(backwardInches * bot.COUNTS_PER_INCH);
-
-            bot.motorRight.setTargetPosition(newRightTarget);
-            bot.motorLeft.setTargetPosition(newLeftTarget);
-
-            bot.setRunToPositionMode();
-
-            bot.driveBackward(bot.DRIVE_SPEED);
-
-            while (opModeIsActive() && bot.isBusy()) {
-                // Do nothing.
-                telemetry.addData("To", "%7d, %7d", newRightTarget, newLeftTarget);
-                telemetry.addData("At", "%7d, %7d", bot.motorRight.getCurrentPosition(), bot.motorLeft.getCurrentPosition());
-                telemetry.update();
-            }
-
-            bot.stopDriving();
-            bot.setUseEncoderMode();
-        }
+    void driveBackwardDistance(int backwardInches, double driveSpeed) {
+        driveForwardDistance(-1 * backwardInches, driveSpeed);
+//        int newRightTarget;
+//        int newLeftTarget;
+//
+//        if (opModeIsActive()) {
+//            newRightTarget = bot.motorRight.getCurrentPosition() - (int)(backwardInches * bot.COUNTS_PER_INCH);
+//            newLeftTarget = bot.motorLeft.getCurrentPosition() - (int)(backwardInches * bot.COUNTS_PER_INCH);
+//
+//            bot.motorRight.setTargetPosition(newRightTarget);
+//            bot.motorLeft.setTargetPosition(newLeftTarget);
+//
+//            bot.setRunToPositionMode();
+//
+//            bot.driveBackward(bot.DRIVE_SPEED);
+//
+//            while (opModeIsActive() && bot.isBusy()) {
+//                // Do nothing.
+//            }
+//
+//            bot.stopDriving();
+//            bot.setUseEncoderMode();
+//        }
     }
 
     void turnLeftDistance(int forwardInches) {
@@ -132,13 +123,10 @@ public abstract class AutoOpBase extends LinearOpMode {
 
             bot.setRunToPositionMode();
 
-            bot.turnLeft(bot.TURN_SPEED);
+            bot.turnLeft(bot.AUTO_TURN_SPEED_SLOW);
 
             while (opModeIsActive() && bot.isBusy()) {
                 // Do nothing.
-                telemetry.addData("To", "%7d, %7d", newRightTarget, newLeftTarget);
-                telemetry.addData("At", "%7d, %7d", bot.motorRight.getCurrentPosition(), bot.motorLeft.getCurrentPosition());
-                telemetry.update();
             }
 
             bot.stopDriving();
@@ -146,109 +134,99 @@ public abstract class AutoOpBase extends LinearOpMode {
         }
     }
 
-    void turnLeftByAngle(float angle) {
-        if (angle == 0) {
+    /**
+     * Turns the robot to an angle (relative to the position of calibration).
+     * @param targetAngle
+     */
+    void turnLeftToAngle(double targetAngle) {
+        Orientation angles = bot.getNewAngles();
+        if (targetAngle == angles.firstAngle) {
             // Nothing to do.
             return;
         }
 
-        // We will try to reduce the current angle by angle degrees. If we end up going below 0, we will use the target
-        // angle as number of degrees below 0.
-        float targetAngle = bot.angles.firstAngle - angle;
-
-        if (targetAngle > 0) {
-            // The target angle is > 0, reduce the first angle by turning left till we come to target angle.
-            while (opModeIsActive() && bot.angles.firstAngle > targetAngle) {
-                bot.turnLeft(bot.TURN_SPEED);
-            }
+        // Check if the target angle is to the left of current angle
+        if (targetAngle > angles.firstAngle) {
+            turnLeftToAngleLocal(targetAngle);
         } else {
-            // The target angle is < 0
+            // We will be crossing over the 180 mark.
 
-            // First come to 0.
-            while (opModeIsActive() && bot.angles.firstAngle > 0) {
-                bot.turnLeft(bot.TURN_SPEED);
-            }
+            // Let's first go to 180.
+            turnLeftToAngleLocal(180);
 
-            // Now turn further till we reach the targetAngle
-            targetAngle = 360 + targetAngle;
-            while (opModeIsActive() && bot.angles.firstAngle > targetAngle) {
-                bot.turnLeft(bot.TURN_SPEED);
-            }
+            // Now let's go to the actual target angle.
+            turnLeftToAngleLocal(targetAngle);
         }
 
         bot.stopDriving();
         bot.setUseEncoderMode();
     }
 
-    void turnRightByAngle(float angle) {
-        if (angle == 0) {
-            // Nothing to do.
-            return;
+    void turnLeftToAngleLocal(double targetAngle) {
+        Orientation angles = bot.getNewAngles();
+        if (opModeIsActive() && angles.firstAngle < targetAngle) {
+            bot.autoOpTurnLeft(bot.AUTO_TURN_SPEED_SLOW);
         }
 
-        // We will try to reduce the current angle by angle degrees. If we end up going below 0, we will use the target
-        // angle as number of degrees below 0.
-        float targetAngle = bot.angles.firstAngle + angle;
-
-        if (targetAngle < 360) {
-            // The target angle is < 360, increase the first angle by turning right till we come to target angle.
-            while (opModeIsActive() && bot.angles.firstAngle < targetAngle) {
-                bot.turnRight(bot.TURN_SPEED);
-            }
-        } else {
-            // The target angle is > 360
-
-            // First come to 360.
-            while (opModeIsActive() && bot.angles.firstAngle < 360) {
-                bot.turnRight(bot.TURN_SPEED);
-            }
-
-            // Now turn further till we reach the targetAngle
-            targetAngle = targetAngle - 360;
-            while (opModeIsActive() && bot.angles.firstAngle < targetAngle) {
-                bot.turnRight(bot.TURN_SPEED);
-            }
+        while (opModeIsActive() && targetAngle > angles.firstAngle) {
+            // Keep turning.
+            angles = bot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            telemetry.addData("Angle", angles.firstAngle);
+            telemetry.update();
         }
 
         bot.stopDriving();
-        bot.setUseEncoderMode();
     }
 
     /**
-     * Turns the robot to an angle (relative to the position of calibration).
-     * @param angle
+     * Turns the robot to an targetAngle (relative to the position of calibration).
+     * @param targetAngle
      */
-    void turnLeftToAngle(float angle) {
-        if (angle == bot.angles.firstAngle) {
+    void turnRightToAngle(double targetAngle) {
+        Orientation angles = bot.getNewAngles();
+        if (targetAngle == angles.firstAngle) {
             // Nothing to do.
             return;
         }
 
-        while (opModeIsActive() && bot.angles.firstAngle != angle) {
-            bot.turnLeft(bot.TURN_SPEED);
+        // Check if the target angle is to the left of current angle
+        if (targetAngle < angles.firstAngle) {
+            turnRightToAngleLocal(targetAngle);
+        } else {
+            // We will be crossing over the 180 mark.
+
+            // Let's first go to -179.99.
+            turnRightToAngleLocal(-179.99);
+
+            // Now let's go to the actual target angle.
+            turnRightToAngleLocal(targetAngle);
         }
 
         bot.stopDriving();
         bot.setUseEncoderMode();
     }
 
-    void turnRightToAngle(float angle) {
-        if (angle == bot.angles.firstAngle) {
-            // Nothing to do.
-            return;
+    void turnRightToAngleLocal(double targetAngle) {
+        Orientation angles = bot.getNewAngles();
+        if (opModeIsActive() && targetAngle < angles.firstAngle ) {
+            bot.turnRight(bot.AUTO_TURN_SPEED_SLOW);
         }
 
-        while (opModeIsActive() && bot.angles.firstAngle != angle) {
-            bot.turnRight(bot.TURN_SPEED);
+        while (opModeIsActive() && targetAngle < angles.firstAngle) {
+            // Keep turning.
+            angles = bot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            telemetry.addData("Angle", angles.firstAngle);
+            telemetry.update();
         }
 
         bot.stopDriving();
-        bot.setUseEncoderMode();
     }
 
-    RelicRecoveryVuMark scanVumarks() {
+    RelicRecoveryVuMark scanVumarks(int timeoutSeconds) {
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(bot.relicTemplate);
-        while (opModeIsActive() && vuMark == RelicRecoveryVuMark.UNKNOWN) {
+        long startTime = System.currentTimeMillis();
+
+        while (opModeIsActive() && vuMark == RelicRecoveryVuMark.UNKNOWN && (System.currentTimeMillis() - startTime) < timeoutSeconds * 1000) {
             vuMark = RelicRecoveryVuMark.from(bot.relicTemplate);
             idle();
         }
