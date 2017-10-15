@@ -57,18 +57,18 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         telemetry.addData("Color", "Left Red: " + isLeftJewelRed());
         if (leftJewelRed) {
             // move forward
-            driveForwardDistance(18, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(23, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
         } else {
             driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
-            driveForwardDistance(21, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
 //        sleep(2000);
 
         // Turn left by 90 degrees.
-        // turnLeftToAngle(90);
+        turnLeftToAngle(90);
 
         while (opModeIsActive()) {
             // Keep this going.
