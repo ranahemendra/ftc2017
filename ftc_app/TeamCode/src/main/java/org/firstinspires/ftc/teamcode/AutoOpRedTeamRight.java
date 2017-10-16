@@ -52,33 +52,57 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         RelicRecoveryVuMark scannedVuMark = scanVumarks(1);
 
         bot.moveJewelKnockerDown();
-        //wait for the servo to move.
-        sleep(500);
+        // Wait for the servo to move.
+        sleep(600);
 
         boolean leftJewelRed = isLeftJewelRed();
-        telemetry.addData("Color", "Left Red: " + isLeftJewelRed());
+        telemetry.addData("Color", "Left Red: " + leftJewelRed);
+        telemetry.update();
+        sleep(2000);
+
         if (leftJewelRed) {
             // move forward
-            driveForwardDistance(23, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
+            driveForwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
             driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             driveForwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
-        sleep(2000);
+        // Go back a few inches to align with the balancing stone
+        driveBackwardDistance(8, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        // Turn left by 90 degrees.
-        turnLeftToAngle(90);
+        // Come back to the original position.
+        driveForwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        if(scannedVuMark == scannedVuMark.LEFT){
-            driveForwardDistance(10, bot.AUTO_DRIVE_SPEED_NORMAL);
+        // Turn left by 88 degrees.
+        turnLeftToAngle(86);
+
+        telemetry.addData("Vumark", scannedVuMark);
+
+        int driveDistance = 16;
+        if(scannedVuMark == scannedVuMark.LEFT) {
+            driveDistance += 12;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
-            driveForwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
+            driveDistance += 6;
         } else if (scannedVuMark == scannedVuMark.RIGHT) {
-            driveForwardDistance(2, bot.AUTO_DRIVE_SPEED_NORMAL);
+            // Don't do anything.
+        } else {
+            driveDistance = 0;
         }
+        telemetry.addData("Drive forward", driveDistance);
+        telemetry.update();
+        driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_NORMAL);
+
+        turnRightToAngle(4);
+        driveForwardDistance(7, bot.AUTO_DRIVE_SPEED_NORMAL);
+
+        bot.unclampGlyph();
+
+        telemetry.addData("Time taken", getRuntime());
+        telemetry.update();
 
         while (opModeIsActive()) {
             // Keep this going.

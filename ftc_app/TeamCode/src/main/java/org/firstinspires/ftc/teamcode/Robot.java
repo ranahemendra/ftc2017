@@ -70,6 +70,7 @@ public class Robot {
 
     static final double AUTO_DRIVE_SPEED_SLOW   = 0.2;
     static final double AUTO_DRIVE_SPEED_NORMAL = 0.5;
+    static final double AUTO_DRIVE_SPEED_FAST   = 1.0;
     static final double CLAW_SPEED              = 0.5;
     static final double TELESCOPIC_ARM_SPEED    = 0.5;
     static final double AUTO_TURN_SPEED_SLOW    = 0.15;
@@ -290,12 +291,12 @@ public class Robot {
         rightClaw.setPosition(1);
     }
 
-    void clampGlyphHolder() {
+    void clampGlyph() {
         leftClaw.setPosition(1);
         rightClaw.setPosition(0);
     }
 
-    void unclampGlyphHolder() {
+    void unclampGlyph() {
         leftClaw.setPosition(0.5);
         rightClaw.setPosition(0.5);
     }

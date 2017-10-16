@@ -72,9 +72,9 @@ public class DriverOpControl extends LinearOpMode {
         // The code to manage the claw goes here.
         //later, make it open a little less, so when drop the glyph in cryptobox, doesn't knock others off
         if(gamepad1.x){
-            bot.clampGlyphHolder();
+            bot.clampGlyph();
         } else if (gamepad1.b){
-            bot.unclampGlyphHolder();
+            bot.unclampGlyph();
         }
 
         if(gamepad1.y) {

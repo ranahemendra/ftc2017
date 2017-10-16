@@ -58,12 +58,12 @@ public abstract class AutoOpBase extends LinearOpMode {
         bot.setUseEncoderMode();
 
         // Hold glyph.
-        bot.clampGlyphHolder();
+        bot.clampGlyph();
 
-        //lift it up slightly
-        bot.moveClawLifterUp(0.5);
-        Thread.sleep(2000);
-        bot.moveClawLifterUp(0);
+        // Lift the arm a bit.
+        bot.moveClawLifterUp(1);
+        sleep(700);
+        bot.resetClawLifter();
     }
 
     void driveForwardDistance(int forwardInches, double driveSpeed) {
@@ -273,6 +273,8 @@ public abstract class AutoOpBase extends LinearOpMode {
 
     boolean isLeftJewelRed() {
         ColorSensor sensor = bot.getColorSensorOutput();
+        telemetry.addData("Red", sensor.red());
+        telemetry.addData("Blue", sensor.blue());
 
         if (sensor.red() > sensor.blue()) {
             return true;
