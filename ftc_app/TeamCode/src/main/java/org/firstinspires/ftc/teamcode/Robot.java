@@ -271,7 +271,7 @@ public class Robot {
     }
 
     void moveJewelKnockerDown() {
-        jewelKnocker.setPosition(0.8);
+        jewelKnocker.setPosition(0.7);
     }
 
     void moveClawLifterUp(double power) {
