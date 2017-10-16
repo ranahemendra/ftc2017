@@ -72,7 +72,7 @@ public class Robot {
     static final double AUTO_DRIVE_SPEED_NORMAL = 0.5;
     static final double CLAW_SPEED              = 0.5;
     static final double TELESCOPIC_ARM_SPEED    = 0.5;
-    static final double AUTO_TURN_SPEED_SLOW    = 0.05;
+    static final double AUTO_TURN_SPEED_SLOW    = 0.15;
     static final double AUTO_TURN_SPEED_NORMAL  = 0.3;
 
     VuforiaLocalizer vuforia;

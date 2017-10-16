@@ -34,6 +34,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 @Autonomous(name = "Auto Op Red Team Right", group = "Autonomous")
 public class AutoOpRedTeamRight extends AutoOpBase {
@@ -44,14 +47,13 @@ public class AutoOpRedTeamRight extends AutoOpBase {
 
         // wait for the start button to be pressed.
         waitForStart();
-//
-//        bot.relicTrackables.activate();
-//        RelicRecoveryVuMark scannedVuMark = scanVumarks(1);
-//
+
+        bot.relicTrackables.activate();
+        RelicRecoveryVuMark scannedVuMark = scanVumarks(1);
+
         bot.moveJewelKnockerDown();
         //wait for the servo to move.
         sleep(500);
-
 
         boolean leftJewelRed = isLeftJewelRed();
         telemetry.addData("Color", "Left Red: " + isLeftJewelRed());
@@ -65,10 +67,18 @@ public class AutoOpRedTeamRight extends AutoOpBase {
             driveForwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
-//        sleep(2000);
+        sleep(2000);
 
         // Turn left by 90 degrees.
         turnLeftToAngle(90);
+
+        if(scannedVuMark == scannedVuMark.LEFT){
+            driveForwardDistance(10, bot.AUTO_DRIVE_SPEED_NORMAL);
+        } else if (scannedVuMark == scannedVuMark.CENTER) {
+            driveForwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
+        } else if (scannedVuMark == scannedVuMark.RIGHT) {
+            driveForwardDistance(2, bot.AUTO_DRIVE_SPEED_NORMAL);
+        }
 
         while (opModeIsActive()) {
             // Keep this going.
@@ -86,7 +96,7 @@ public class AutoOpRedTeamRight extends AutoOpBase {
 //            case RIGHT:
 //                driveDistance = 14;
 //                break;
-//        }
+
 //        driveForwardDistance(driveDistance);
 //        turnRightToAngle(0);
 //
