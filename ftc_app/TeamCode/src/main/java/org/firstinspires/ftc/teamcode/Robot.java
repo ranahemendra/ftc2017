@@ -68,7 +68,7 @@ public class Robot {
     static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
-    static final double AUTO_DRIVE_SPEED_SLOW   = 0.2;
+    static final double AUTO_DRIVE_SPEED_SLOW   = 0.3;
     static final double AUTO_DRIVE_SPEED_NORMAL = 0.5;
     static final double AUTO_DRIVE_SPEED_FAST   = 1.0;
     static final double CLAW_SPEED              = 0.5;
@@ -95,11 +95,14 @@ public class Robot {
 
     // sometimes it helps to multiply the raw RGB values with a scale factor
     // to amplify/attentuate the measured values.
-    double SCALE_FACTOR = 255;
+    final double SCALE_FACTOR = 255;
+
     // hsvValues is an array that will hold the hue, saturation, and value information.
-    float hsvValues[] = {0F, 0F, 0F};
-    ColorSensor sensorColor;
-    View relativeLayout;
+    float jewelColorSensorHsvValues[] = {0F, 0F, 0F};
+    ColorSensor jewelColorSensor;
+
+    float lineColorSensorHsvValues[] = {0F, 0F, 0F};
+    ColorSensor lineColorSensor;
 
     // The IMU sensor object
     BNO055IMU imu;
@@ -137,11 +140,11 @@ public class Robot {
 
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
 
-        // get a reference to the color sensor.
-        sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color");
+        // get a reference to the jewel color sensor.
+        jewelColorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
 
-
-//        motorLeft.setDirection(DcMotor.Direction.REVERSE);
+        // get a reference to line color sensor.
+        lineColorSensor = hardwareMap.get(ColorSensor.class, "line_color_sensor");
 
         // Set all motors to zero power
         stopDriving();
@@ -154,16 +157,8 @@ public class Robot {
         stopRelicHolder();
 
         resetJewelKnocker();
-        initColorSensor();
 
         initGyro();
-    }
-
-    private void initColorSensor() {
-        // get a reference to the RelativeLayout so we can change the background
-        // color of the Robot Controller app to match the hue detected by the RGB sensor.
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
     }
 
     void initVuforia() {
@@ -200,9 +195,6 @@ public class Robot {
 
         angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         gravity  = imu.getGravity();
-
-        // Set up our telemetry dashboard
-//        composeTelemetry();
     }
 
     void resetEncoders() {
@@ -267,11 +259,11 @@ public class Robot {
     }
 
     void resetJewelKnocker() {
-        jewelKnocker.setPosition(0);
+        jewelKnocker.setPosition(0.1);
     }
 
     void moveJewelKnockerDown() {
-        jewelKnocker.setPosition(0.7);
+        jewelKnocker.setPosition(0.8);
     }
 
     void moveClawLifterUp(double power) {
@@ -297,8 +289,9 @@ public class Robot {
     }
 
     void unclampGlyph() {
-        leftClaw.setPosition(0.5);
-        rightClaw.setPosition(0.5);
+        resetGlyphHolder();
+//        leftClaw.setPosition(0.3);
+//        rightClaw.setPosition(0.7);
     }
 
     void resetTelescopicArm() {
@@ -346,65 +339,6 @@ public class Robot {
         Thread.sleep(50);
     }
 
-    void composeTelemetry() {
-        // At the beginning of each telemetry update, grab a bunch of data
-        // from the IMU that we will then display in separate lines.
-        telemetry.addAction(new Runnable() { @Override public void run()
-        {
-            // Acquiring the angles is relatively expensive; we don't want
-            // to do that in each of the three items that need that info, as that's
-            // three times the necessary expense.
-            angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-            gravity  = getNewGravity();
-        }
-        });
-
-        telemetry.addLine()
-                .addData("status", new Func<String>() {
-                    @Override public String value() {
-                        return imu.getSystemStatus().toShortString();
-                    }
-                })
-                .addData("calib", new Func<String>() {
-                    @Override public String value() {
-                        return imu.getCalibrationStatus().toString();
-                    }
-                });
-
-        telemetry.addLine()
-                .addData("heading", new Func<String>() {
-                    @Override public String value() {
-                        return formatAngle(angles.angleUnit, angles.firstAngle);
-                    }
-                })
-                .addData("roll", new Func<String>() {
-                    @Override public String value() {
-                        return formatAngle(angles.angleUnit, angles.secondAngle);
-                    }
-                })
-                .addData("pitch", new Func<String>() {
-                    @Override public String value() {
-                        return formatAngle(angles.angleUnit, angles.thirdAngle);
-                    }
-                });
-
-        telemetry.addLine()
-                .addData("grvty", new Func<String>() {
-                    @Override public String value() {
-                        return gravity.toString();
-                    }
-                })
-                .addData("mag", new Func<String>() {
-                    @Override public String value() {
-                        return String.format(Locale.getDefault(), "%.3f",
-                                Math.sqrt(gravity.xAccel*gravity.xAccel
-                                        + gravity.yAccel*gravity.yAccel
-                                        + gravity.zAccel*gravity.zAccel));
-                    }
-                });
-    }
-
-
     //----------------------------------------------------------------------------------------------
     // Formatting
     //----------------------------------------------------------------------------------------------
@@ -417,16 +351,28 @@ public class Robot {
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
 
-    ColorSensor getColorSensorOutput() {
+    ColorSensor getJewelColorSensorOutput() {
         // convert the RGB values to HSV values.
         // multiply by the SCALE_FACTOR.
         // then cast it back to int (SCALE_FACTOR is a double)
-        Color.RGBToHSV((int) (sensorColor.red() * SCALE_FACTOR),
-                (int) (sensorColor.green() * SCALE_FACTOR),
-                (int) (sensorColor.blue() * SCALE_FACTOR),
-                hsvValues);
+        Color.RGBToHSV((int) (jewelColorSensor.red() * SCALE_FACTOR),
+                (int) (jewelColorSensor.green() * SCALE_FACTOR),
+                (int) (jewelColorSensor.blue() * SCALE_FACTOR),
+                jewelColorSensorHsvValues);
 
-        return sensorColor;
+        return jewelColorSensor;
+    }
+
+    ColorSensor getLineColorSensorOutput() {
+        // convert the RGB values to HSV values.
+        // multiply by the SCALE_FACTOR.
+        // then cast it back to int (SCALE_FACTOR is a double)
+        Color.RGBToHSV((int) (lineColorSensor.red() * SCALE_FACTOR),
+                (int) (lineColorSensor.green() * SCALE_FACTOR),
+                (int) (lineColorSensor.blue() * SCALE_FACTOR),
+                lineColorSensorHsvValues);
+
+        return lineColorSensor;
     }
 
     public float getCurrentAngle() {

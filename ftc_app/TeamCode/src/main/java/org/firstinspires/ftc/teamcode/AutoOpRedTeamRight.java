@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
@@ -77,27 +78,29 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         // Come back to the original position.
         driveForwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        // Turn left by 88 degrees.
-        turnLeftToAngle(86);
+        // Turn right
+        turnRightToAngle(-82);
+
+        // Back up all the way to the red line.
+        driveBackwardTill(RED, bot.AUTO_DRIVE_SPEED_SLOW);
 
         telemetry.addData("Vumark", scannedVuMark);
 
-        int driveDistance = 16;
+        int driveDistance = 40;
         if(scannedVuMark == scannedVuMark.LEFT) {
-            driveDistance += 12;
+            driveDistance -= 12;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
-            driveDistance += 6;
+            driveDistance -= 6;
         } else if (scannedVuMark == scannedVuMark.RIGHT) {
             // Don't do anything.
-        } else {
-            driveDistance = 0;
         }
-        telemetry.addData("Drive forward", driveDistance);
-        telemetry.update();
-        driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        turnRightToAngle(4);
-        driveForwardDistance(7, bot.AUTO_DRIVE_SPEED_NORMAL);
+        // Drive forward to the cryptobox
+        driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
+
+        // Turn right.
+        turnLeftToAngle(-4);
+        driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_SLOW);
 
         bot.unclampGlyph();
 
@@ -108,23 +111,5 @@ public class AutoOpRedTeamRight extends AutoOpBase {
             // Keep this going.
             idle();
         }
-
-//        int driveDistance = 0;
-//        switch (scannedVuMark) {
-//            case LEFT:
-//                driveDistance = 26;
-//                break;
-//            case CENTER:
-//                driveDistance = 20;
-//                break;
-//            case RIGHT:
-//                driveDistance = 14;
-//                break;
-
-//        driveForwardDistance(driveDistance);
-//        turnRightToAngle(0);
-//
-//        // Drive forward.
-//        bot.unclampGlyphHolder();
     }
 }

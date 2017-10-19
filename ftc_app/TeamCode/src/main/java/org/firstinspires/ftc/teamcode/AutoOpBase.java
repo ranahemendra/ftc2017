@@ -42,6 +42,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 
 public abstract class AutoOpBase extends LinearOpMode {
+
+    static final int RED = 0;
+    static final int BLUE = 1;
+
     Robot bot = new Robot();
 
     void initBot() throws InterruptedException {
@@ -60,10 +64,10 @@ public abstract class AutoOpBase extends LinearOpMode {
         // Hold glyph.
         bot.clampGlyph();
 
-        // Lift the arm a bit.
-        bot.moveClawLifterUp(1);
-        sleep(700);
-        bot.resetClawLifter();
+//        // Lift the arm a bit.
+//        bot.moveClawLifterUp(1);
+//        sleep(700);
+//        bot.resetClawLifter();
     }
 
     void driveForwardDistance(int forwardInches, double driveSpeed) {
@@ -92,27 +96,6 @@ public abstract class AutoOpBase extends LinearOpMode {
 
     void driveBackwardDistance(int backwardInches, double driveSpeed) {
         driveForwardDistance(-1 * backwardInches, driveSpeed);
-//        int newRightTarget;
-//        int newLeftTarget;
-//
-//        if (opModeIsActive()) {
-//            newRightTarget = bot.motorRight.getCurrentPosition() - (int)(backwardInches * bot.COUNTS_PER_INCH);
-//            newLeftTarget = bot.motorLeft.getCurrentPosition() - (int)(backwardInches * bot.COUNTS_PER_INCH);
-//
-//            bot.motorRight.setTargetPosition(newRightTarget);
-//            bot.motorLeft.setTargetPosition(newLeftTarget);
-//
-//            bot.setRunToPositionMode();
-//
-//            bot.driveBackward(bot.DRIVE_SPEED);
-//
-//            while (opModeIsActive() && bot.isBusy()) {
-//                // Do nothing.
-//            }
-//
-//            bot.stopDriving();
-//            bot.setUseEncoderMode();
-//        }
     }
 
     void turnLeftDistance(int forwardInches) {
@@ -212,15 +195,16 @@ public abstract class AutoOpBase extends LinearOpMode {
     }
 
     void turnRightToAngleLocal(double targetAngle) {
-        float currentAngles = bot.getCurrentAngle();
-        if (opModeIsActive() && targetAngle < currentAngles ) {
+        float currentAngle = bot.getCurrentAngle();
+        if (opModeIsActive() && targetAngle < currentAngle) {
             bot.turnRight(bot.AUTO_TURN_SPEED_SLOW);
         }
 
-        while (opModeIsActive() && targetAngle < currentAngles) {
+        while (opModeIsActive() && targetAngle < currentAngle) {
             // Keep turning.
-            currentAngles = bot.getCurrentAngle();
-            telemetry.addData("Angle", currentAngles);
+            currentAngle = bot.getCurrentAngle();
+            telemetry.addData("Target Angle", targetAngle);
+            telemetry.addData("Current Angle", currentAngle);
             telemetry.update();
         }
 
@@ -272,7 +256,7 @@ public abstract class AutoOpBase extends LinearOpMode {
     }
 
     boolean isLeftJewelRed() {
-        ColorSensor sensor = bot.getColorSensorOutput();
+        ColorSensor sensor = bot.getJewelColorSensorOutput();
         telemetry.addData("Red", sensor.red());
         telemetry.addData("Blue", sensor.blue());
 
@@ -281,5 +265,32 @@ public abstract class AutoOpBase extends LinearOpMode {
         } else {
             return false;
         }
+    }
+
+    void driveBackwardTill(int color, double power) {
+        if (opModeIsActive()) {
+            bot.driveBackward(power);
+        }
+
+        while (opModeIsActive() && !detectedLine(color)) {
+            // Keep doing this.
+        }
+
+        bot.stopDriving();
+        bot.setUseEncoderMode();
+    }
+
+    boolean detectedLine(int color) {
+        ColorSensor sensor = bot.getLineColorSensorOutput();
+
+        if (color == RED && sensor.red() > 50) {
+            return true;
+        }
+
+        if (color == BLUE && sensor.blue() > 50) {
+            return true;
+        }
+
+        return false;
     }
 }
