@@ -88,9 +88,9 @@ public class AutoOpRedTeamRight extends AutoOpBase {
 
         int driveDistance = 40;
         if(scannedVuMark == scannedVuMark.LEFT) {
-            driveDistance -= 12;
+            driveDistance -= 16;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
-            driveDistance -= 6;
+            driveDistance -= 8;
         } else if (scannedVuMark == scannedVuMark.RIGHT) {
             // Don't do anything.
         }
@@ -103,6 +103,8 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_SLOW);
 
         bot.unclampGlyph();
+
+        driveBackwardDistance(1, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();
