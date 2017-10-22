@@ -68,13 +68,18 @@ public class Robot {
     static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
 
-    static final double AUTO_DRIVE_SPEED_SLOW   = 0.3;
+    static final double AUTO_DRIVE_SPEED_SLOW   = 0.25;
     static final double AUTO_DRIVE_SPEED_NORMAL = 0.5;
     static final double AUTO_DRIVE_SPEED_FAST   = 1.0;
     static final double CLAW_SPEED              = 0.5;
     static final double TELESCOPIC_ARM_SPEED    = 0.5;
     static final double AUTO_TURN_SPEED_SLOW    = 0.15;
     static final double AUTO_TURN_SPEED_NORMAL  = 0.3;
+
+    static final int LEAN_LEFT                  = -1;
+    static final int GO_STRAIGHT                = 0;
+    static final int LEAN_RIGHT                 = 1;
+    static final double LEAN_CORRECTION         = 0.20;
 
     VuforiaLocalizer vuforia;
     VuforiaTrackables relicTrackables;
@@ -215,10 +220,38 @@ public class Robot {
     }
 
     void driveForward(double power) {
+        driveForward(power, power);
+    }
+
+    void driveForward(double power, int lean) {
+        if (lean == GO_STRAIGHT) {
+            driveForward(power, power);
+        } else if (lean == LEAN_LEFT) {
+            driveForward(power - power * LEAN_CORRECTION, power);
+        } else if (lean == LEAN_RIGHT) {
+            driveForward(power, power - power * LEAN_CORRECTION);
+        }
+    }
+
+    void driveForward(double leftPower, double rightPower) {
         motorLeft.setDirection(DcMotor.Direction.REVERSE);
         motorRight.setDirection(DcMotor.Direction.FORWARD);
-        motorLeft.setPower(power);
-        motorRight.setPower(power);
+        motorLeft.setPower(leftPower);
+        motorRight.setPower(rightPower);
+    }
+
+    void driveBackward(double power, int lean) {
+        if (lean == GO_STRAIGHT) {
+            driveBackward(power, power);
+        } else if (lean == LEAN_LEFT) {
+            driveBackward(power - power * LEAN_CORRECTION, power);
+        } else if (lean == LEAN_RIGHT) {
+            driveBackward(power, power - power * LEAN_CORRECTION);
+        }
+    }
+
+    void driveBackward(double leftPower, double rightPower) {
+        driveForward(-leftPower, -rightPower);
     }
 
     void driveBackward(double power) {
