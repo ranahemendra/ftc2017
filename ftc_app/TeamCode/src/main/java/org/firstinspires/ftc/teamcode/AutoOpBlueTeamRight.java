@@ -60,18 +60,17 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
 
         // scans right jewel
         boolean leftJewelRed = isLeftJewelRed();
-        telemetry.addData("Color", "Left Red: " + leftJewelRed);
-        telemetry.update();
-        sleep(2000);
 
         if (leftJewelRed) {
             // move forward
             driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
+            sleep(500);
             driveBackwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
             driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
+            sleep(500);
             driveBackwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
