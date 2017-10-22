@@ -82,7 +82,7 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
 
         telemetry.addData("Vumark", scannedVuMark);
 
-        int driveDistance = 5;
+        int driveDistance = 2;
         if(scannedVuMark == scannedVuMark.LEFT) {
             driveDistance += 16;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
