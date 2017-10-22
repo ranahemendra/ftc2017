@@ -33,7 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
-@Autonomous(name = "Auto Op Red Team Left", group = "Autonomous")
+@Autonomous(name = "Red Team Left", group = "Autonomous")
 public class AutoOpRedTeamLeft extends AutoOpBase {
 
     @Override

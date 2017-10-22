@@ -39,7 +39,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-@Autonomous(name = "Auto Op Blue Team Right", group = "Autonomous")
+@Autonomous(name = "Blue Team Right", group = "Autonomous")
 public class AutoOpBlueTeamRight extends AutoOpBase {
 
     @Override
