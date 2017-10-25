@@ -93,7 +93,7 @@ public class Robot {
     Servo rightClaw;
 
     DcMotor telescopicArmMotor;
-    Servo relicArm;
+//    DcMotor relicArm;
     CRServo relicHolder;
 
     Servo jewelKnocker;
@@ -140,7 +140,8 @@ public class Robot {
         leftClaw = hardwareMap.servo.get("clawLeft");
         rightClaw = hardwareMap.servo.get("clawRight");
         telescopicArmMotor = hardwareMap.dcMotor.get("telescopic_arm_motor");
-        relicArm = hardwareMap.servo.get("relic_arm");
+
+//        relicArm = hardwareMap.dcMotor.get("relic_arm");
         relicHolder = hardwareMap.crservo.get("relic_holder");
 
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
@@ -337,25 +338,25 @@ public class Robot {
 
     // Initializing continuous rotation servo
     void resetRelicArm() throws InterruptedException {
-        relicArm.setPosition(0);
-        telemetry.addData("Relic Arm", relicArm.getPosition());
+//        relicArm.setPosition(0);
+//        telemetry.addData("Relic Arm", relicArm.getPosition());
     }
 
     // Sets Relic Arm Power
     void relicArmUp() throws InterruptedException {
-        double position = relicArm.getPosition();
-        if(position < 1){
-            relicArm.setPosition(position + 0.05);
-            Thread.sleep(50);
-        }
+//        double position = relicArm.getPosition();
+//        if(position < 1){
+//            relicArm.setPosition(position + 0.05);
+//            Thread.sleep(50);
+//        }
     }
 
     void relicArmDown() throws InterruptedException {
-        double position = relicArm.getPosition();
-        if(position > 0){
-            relicArm.setPosition(position - 0.05);
-            Thread.sleep(50);
-        }
+//        double position = relicArm.getPosition();
+//        if(position > 0){
+//            relicArm.setPosition(position - 0.05);
+//            Thread.sleep(50);
+//        }
     }
 
     void stopRelicHolder() {
