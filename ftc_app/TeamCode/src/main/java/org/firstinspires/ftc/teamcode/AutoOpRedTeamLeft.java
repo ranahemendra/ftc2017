@@ -35,7 +35,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 @Autonomous(name = "Red Team Left", group = "Autonomous")
 public class AutoOpRedTeamLeft extends AutoOpBase {
-
     @Override
     public void runOpMode() throws InterruptedException {
         initBot();
@@ -69,20 +68,22 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         }
 
         // Go back a few inches to align with the balancing stone
-        driveBackwardDistance(8, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(9, bot.AUTO_DRIVE_SPEED_NORMAL);
+        sleep(500);
 
         // Come back to the original position.
         driveForwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        turnLeftToAngleLocal(84);
+        turnLeftToAngleLocal(80);
 
-        driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
+        driveForwardDistance(5, bot.AUTO_DRIVE_SPEED_SLOW);
 
-        turnRightToAngleLocal(0);
+        turnRightToAngleLocal(5);
 
         telemetry.addData("Vumark", scannedVuMark);
+        telemetry.update();
 
-        int driveDistance = 2;
+        int driveDistance = 6;
         if(scannedVuMark == scannedVuMark.LEFT) {
             driveDistance += 16;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -95,8 +96,8 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn right.
-        turnRightToAngle(-86);
-        driveForwardDistance(11, bot.AUTO_DRIVE_SPEED_SLOW);
+        turnRightToAngle(-83);
+        driveForwardDistance(13, bot.AUTO_DRIVE_SPEED_SLOW);
 
         bot.unclampGlyph();
 

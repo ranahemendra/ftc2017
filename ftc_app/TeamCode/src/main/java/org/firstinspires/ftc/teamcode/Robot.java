@@ -293,7 +293,7 @@ public class Robot {
     }
 
     void resetJewelKnocker() {
-        jewelKnocker.setPosition(0.1);
+        jewelKnocker.setPosition(0);
     }
 
     void moveJewelKnockerDown() {
@@ -323,9 +323,9 @@ public class Robot {
     }
 
     void unclampGlyph() {
-        resetGlyphHolder();
-//        leftClaw.setPosition(0.3);
-//        rightClaw.setPosition(0.7);
+//        resetGlyphHolder();
+        leftClaw.setPosition(0.1);
+        rightClaw.setPosition(0.9);
     }
 
     void resetTelescopicArm() {
