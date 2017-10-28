@@ -29,20 +29,16 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.view.View;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -71,8 +67,8 @@ public class Robot {
     static final double AUTO_DRIVE_SPEED_SLOW   = 0.25;
     static final double AUTO_DRIVE_SPEED_NORMAL = 0.5;
     static final double AUTO_DRIVE_SPEED_FAST   = 1.0;
-    static final double CLAW_SPEED              = 0.5;
-    static final double TELESCOPIC_ARM_SPEED    = 0.5;
+    static final double CLAW_SPEED              = 1;
+    static final double TELESCOPIC_ARM_SPEED    = 1;
     static final double AUTO_TURN_SPEED_SLOW    = 0.15;
     static final double AUTO_TURN_SPEED_NORMAL  = 0.3;
 
@@ -93,8 +89,8 @@ public class Robot {
     Servo rightClaw;
 
     DcMotor telescopicArmMotor;
-//    DcMotor relicArm;
-    CRServo relicHolder;
+    DcMotor relicArm;
+    Servo relicHolder;
 
     Servo jewelKnocker;
 
@@ -141,8 +137,8 @@ public class Robot {
         rightClaw = hardwareMap.servo.get("clawRight");
         telescopicArmMotor = hardwareMap.dcMotor.get("telescopic_arm_motor");
 
-//        relicArm = hardwareMap.dcMotor.get("relic_arm");
-        relicHolder = hardwareMap.crservo.get("relic_holder");
+        relicArm = hardwareMap.dcMotor.get("relic_arm");
+        relicHolder = hardwareMap.servo.get("relic_holder");
 
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
 
@@ -159,8 +155,8 @@ public class Robot {
 
         // Set the default position of all the servos.
         resetTelescopicArm();
-        resetRelicArm();
-        stopRelicHolder();
+        stopRelicArm();
+        resetRelicHolder();
 
         resetJewelKnocker();
 
@@ -337,40 +333,39 @@ public class Robot {
     }
 
     // Initializing continuous rotation servo
-    void resetRelicArm() throws InterruptedException {
-//        relicArm.setPosition(0);
-//        telemetry.addData("Relic Arm", relicArm.getPosition());
+    void stopRelicArm() {
+        relicArm.setPower(0);
     }
 
     // Sets Relic Arm Power
-    void relicArmUp() throws InterruptedException {
-//        double position = relicArm.getPosition();
-//        if(position < 1){
-//            relicArm.setPosition(position + 0.05);
-//            Thread.sleep(50);
-//        }
+    void relicArmUp(double power) throws InterruptedException {
+        relicArm.setDirection(DcMotor.Direction.FORWARD);
+        relicArm.setPower(power);
     }
 
-    void relicArmDown() throws InterruptedException {
-//        double position = relicArm.getPosition();
-//        if(position > 0){
-//            relicArm.setPosition(position - 0.05);
-//            Thread.sleep(50);
-//        }
+    void relicArmDown(double power) {
+        relicArm.setDirection(DcMotor.Direction.REVERSE);
+        relicArm.setPower(power);
     }
 
-    void stopRelicHolder() {
-        relicHolder.setPower(0);
+    void resetRelicHolder() {
+        relicHolder.setPosition(0.5);
     }
 
-    void grabRelic()throws InterruptedException{
-        relicHolder.setPower(0.5);
-        Thread.sleep(50);
+    void grabRelic() throws InterruptedException{
+        double position = relicHolder.getPosition();
+        if(position < 1){
+            relicHolder.setPosition(position + 0.05);
+            Thread.sleep(50);
+        }
     }
 
-    void releaseRelic()throws InterruptedException{
-        relicHolder.setPower(-0.5);
-        Thread.sleep(50);
+    void releaseRelic() throws InterruptedException{
+        double position = relicHolder.getPosition();
+        if(position > 0){
+            relicHolder.setPosition(position - 0.05);
+            Thread.sleep(50);
+        }
     }
 
     //----------------------------------------------------------------------------------------------

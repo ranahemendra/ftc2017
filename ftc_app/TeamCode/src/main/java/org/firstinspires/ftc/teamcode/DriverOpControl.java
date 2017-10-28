@@ -58,11 +58,11 @@ public class DriverOpControl extends LinearOpMode {
         }
 
         if (leftStickX > 0) {
-            bot.turnRight(leftStickX);
+            bot.turnRight(leftStickX/2);
         }
 
         if(leftStickX < 0){
-            bot.turnLeft(leftStickX);
+            bot.turnLeft(leftStickX/2);
         }
 
         telemetry.addData("DT: ", "LT: %7f, RT: %7f, Turn: %7f", leftTrigger, rightTrigger, leftStickX);
@@ -87,15 +87,21 @@ public class DriverOpControl extends LinearOpMode {
     }
 
     void manageTelescopicArm() {
-        bot.extendTelescopicArm(gamepad2.right_trigger);
+        if(gamepad2.y) {
+            bot.extendTelescopicArm(bot.TELESCOPIC_ARM_SPEED);
+        } else {
+            bot.extendTelescopicArm(0);
+        }
     }
 
         //relic arm movement
     void manageRelicArm() throws InterruptedException {
-        if(gamepad2.y){
-            bot.relicArmUp();
-        } else if(gamepad2.a){
-            bot.relicArmDown();
+        if(gamepad2.right_trigger > 0){
+            bot.relicArmUp(gamepad2.right_trigger);
+        } else if(gamepad2.left_trigger > 0){
+            bot.relicArmDown(gamepad2.left_trigger);
+        }  else {
+            bot.stopRelicArm();
         }
     }
 
@@ -104,8 +110,6 @@ public class DriverOpControl extends LinearOpMode {
             bot.grabRelic();
         } else if(gamepad2.b){
             bot.releaseRelic();
-        } else {
-            bot.stopRelicHolder();
         }
     }
 
