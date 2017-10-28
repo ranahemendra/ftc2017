@@ -35,13 +35,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 @Autonomous(name = "Red Team Left", group = "Autonomous")
 public class AutoOpRedTeamLeft extends AutoOpBase {
-    float startAngle;
-    float endAngle;
-    int startPositionLeft;
-    int startPositionRight;
-    int endPositionLeft;
-    int endPositionRight;
-
     @Override
     public void runOpMode() throws InterruptedException {
         initBot();
