@@ -60,12 +60,12 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
             driveForwardDistance(angleToMaintain, 3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(angleToMaintain, 20, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(angleToMaintain, 21, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
             driveBackwardDistance(angleToMaintain, 3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(angleToMaintain, 26, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(angleToMaintain, 27, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
         sleep(2000);
@@ -88,7 +88,7 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         telemetry.addData("Vumark", scannedVuMark);
         telemetry.update();
 
-        int driveDistance = 3;
+        int driveDistance = 2;
         if(scannedVuMark == scannedVuMark.LEFT) {
             driveDistance += 16;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -108,6 +108,7 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         bot.unclampGlyph();
 
         driveBackwardDistance(angleToMaintain, 3, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(angleToMaintain, 3, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();

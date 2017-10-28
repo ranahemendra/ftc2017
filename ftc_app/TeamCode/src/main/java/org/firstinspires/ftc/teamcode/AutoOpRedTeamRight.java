@@ -106,7 +106,9 @@ public class AutoOpRedTeamRight extends AutoOpBase {
 
         bot.unclampGlyph();
 
-        driveBackwardDistance(1, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
+        sleep(500);
+        driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();

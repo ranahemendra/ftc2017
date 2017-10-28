@@ -361,6 +361,38 @@ public abstract class AutoOpBase extends LinearOpMode {
         bot.setUseEncoderMode();
     }
 
+    void driveBackwardTill(double maintainAngle, int color, double power) {
+        if (opModeIsActive()) {
+            bot.driveBackward(power);
+
+            while (opModeIsActive() && !detectedLine(color)) {
+                float newAngle = bot.getCurrentAngle();
+                if (newAngle != maintainAngle && Math.abs(newAngle - maintainAngle) > 1) {
+                    if (newAngle < maintainAngle) {
+                        // bot veered right. give less power to the left motor.
+                        bot.driveBackward(power, bot.LEAN_LEFT);
+                    } else {
+                        // bot veered left. give less power to the right motor.
+                        bot.driveBackward(power, bot.LEAN_RIGHT);
+                    }
+                } else {
+                    bot.driveBackward(power, bot.GO_STRAIGHT);
+                }
+
+                double endAngle = bot.getCurrentAngle();
+                int endPositionLeft = bot.motorLeft.getCurrentPosition();
+                int endPositionRight = bot.motorRight.getCurrentPosition();
+
+                telemetry.addData("Angle: ", "Start: " + maintainAngle + " End: " + endAngle);
+                telemetry.addData("End Position: ", "Left: " + endPositionLeft + " Right: " + endPositionRight);
+                telemetry.update();
+            }
+
+            bot.stopDriving();
+            bot.setUseEncoderMode();
+        }
+    }
+
     boolean detectedLine(int color) {
         ColorSensor sensor = bot.getLineColorSensorOutput();
 
