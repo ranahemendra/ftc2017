@@ -35,6 +35,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 @Autonomous(name = "Red Team Left", group = "Autonomous")
 public class AutoOpRedTeamLeft extends AutoOpBase {
+    float startAngle;
+    float endAngle;
+    int startPositionLeft;
+    int startPositionRight;
+    int endPositionLeft;
+    int endPositionRight;
+
     @Override
     public void runOpMode() throws InterruptedException {
         initBot();
@@ -61,7 +68,8 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
             sleep(500);
             driveForwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
-            driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveBackwardDistance(4, bot.AUTO_DRIVE_SPEED_SLOW);
+            sleep(700);
             bot.resetJewelKnocker();
             sleep(500);
             driveForwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
