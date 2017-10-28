@@ -54,37 +54,41 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         telemetry.update();
         sleep(500);
 
+        double angleToMaintain = 0;
         if (leftJewelRed) {
             // move forward
-            driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(angleToMaintain, 3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(angleToMaintain, 20, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
-            driveBackwardDistance(4, bot.AUTO_DRIVE_SPEED_SLOW);
-            sleep(700);
+            driveBackwardDistance(angleToMaintain, 3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(angleToMaintain, 26, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
+        sleep(2000);
+
         // Go back a few inches to align with the balancing stone
-        driveBackwardDistance(9, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(angleToMaintain, 9, bot.AUTO_DRIVE_SPEED_SLOW);
         sleep(500);
 
         // Come back to the original position.
-        driveForwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(angleToMaintain, 6, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        turnLeftToAngleLocal(80);
+        angleToMaintain = 80;
+        turnLeftToAngle(angleToMaintain);
 
-        driveForwardDistance(5, bot.AUTO_DRIVE_SPEED_SLOW);
+        driveForwardDistance(angleToMaintain, 5, bot.AUTO_DRIVE_SPEED_SLOW);
 
-        turnRightToAngleLocal(5);
+        angleToMaintain = 5;
+        turnRightToAngle(angleToMaintain);
 
         telemetry.addData("Vumark", scannedVuMark);
         telemetry.update();
 
-        int driveDistance = 5;
+        int driveDistance = 3;
         if(scannedVuMark == scannedVuMark.LEFT) {
             driveDistance += 16;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -94,15 +98,16 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         }
 
         // Drive forward to the cryptobox
-        driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
+        driveForwardDistance(angleToMaintain, driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn right.
-        turnRightToAngle(-83);
-        driveForwardDistance(13, bot.AUTO_DRIVE_SPEED_SLOW);
+        angleToMaintain = -83;
+        turnRightToAngle(angleToMaintain);
+        driveForwardDistance(angleToMaintain, 13, bot.AUTO_DRIVE_SPEED_SLOW);
 
         bot.unclampGlyph();
 
-        driveBackwardDistance(1, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(angleToMaintain, 3, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();

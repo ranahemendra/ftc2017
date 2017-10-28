@@ -70,9 +70,7 @@ public abstract class AutoOpBase extends LinearOpMode {
 //        bot.resetClawLifter();
     }
 
-    void driveForwardDistance(int forwardInches, double driveSpeed) {
-        float startAngle = bot.getCurrentAngle();
-
+    void driveForwardDistance(double maintainAngle, int forwardInches, double driveSpeed) {
         if (opModeIsActive()) {
             int newRightTarget = bot.motorRight.getCurrentPosition() + (int) (forwardInches * bot.COUNTS_PER_INCH);
             int newLeftTarget = bot.motorLeft.getCurrentPosition() + (int) (forwardInches * bot.COUNTS_PER_INCH);
@@ -86,8 +84,8 @@ public abstract class AutoOpBase extends LinearOpMode {
 
             while (opModeIsActive() && bot.isBusy()) {
                 float newAngle = bot.getCurrentAngle();
-                if (newAngle != startAngle && Math.abs(newAngle - startAngle) > 1) {
-                    if (newAngle < startAngle) {
+                if (newAngle != maintainAngle && Math.abs(newAngle - maintainAngle) > 1) {
+                    if (newAngle < maintainAngle) {
                         // bot veered right. give less power to the left motor.
                         bot.driveForward(driveSpeed, bot.LEAN_LEFT);
                     } else {
@@ -102,7 +100,7 @@ public abstract class AutoOpBase extends LinearOpMode {
                 int endPositionLeft = bot.motorLeft.getCurrentPosition();
                 int endPositionRight = bot.motorRight.getCurrentPosition();
 
-                telemetry.addData("Angle: ", "Start: " + startAngle + " End: " + endAngle);
+                telemetry.addData("Angle: ", "Start: " + maintainAngle + " End: " + endAngle);
                 telemetry.addData("End Position: ", "Left: " + endPositionLeft + " Right: " + endPositionRight);
                 telemetry.update();
             }
@@ -112,29 +110,70 @@ public abstract class AutoOpBase extends LinearOpMode {
         }
     }
 
-//    void driveForwardDistance(int forwardInches, double driveSpeed) {
-//        int newRightTarget;
-//        int newLeftTarget;
-//
-//        if (opModeIsActive()) {
-//            newRightTarget = bot.motorRight.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
-//            newLeftTarget = bot.motorLeft.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
-//
-//            bot.motorRight.setTargetPosition(newRightTarget);
-//            bot.motorLeft.setTargetPosition(newLeftTarget);
-//
-//            bot.setRunToPositionMode();
-//
-//            bot.driveForward(driveSpeed);
-//
-//            while (opModeIsActive() && bot.isBusy()) {
-//                // Do nothing.
-//            }
-//
-//            bot.stopDriving();
-//            bot.setUseEncoderMode();
-//        }
-//    }
+    void driveForwardDistance(int forwardInches, double driveSpeed) {
+        int newRightTarget;
+        int newLeftTarget;
+
+        if (opModeIsActive()) {
+            newRightTarget = bot.motorRight.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
+            newLeftTarget = bot.motorLeft.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
+
+            bot.motorRight.setTargetPosition(newRightTarget);
+            bot.motorLeft.setTargetPosition(newLeftTarget);
+
+            bot.setRunToPositionMode();
+
+            bot.driveForward(driveSpeed);
+
+            while (opModeIsActive() && bot.isBusy()) {
+                // Do nothing.
+            }
+
+            bot.stopDriving();
+            bot.setUseEncoderMode();
+        }
+    }
+
+    void driveBackwardDistance(double maintainAngle, int backwardInches, double driveSpeed) {
+        backwardInches = -1 * backwardInches;
+
+        if (opModeIsActive()) {
+            int newRightTarget = bot.motorRight.getCurrentPosition() + (int) (backwardInches * bot.COUNTS_PER_INCH);
+            int newLeftTarget = bot.motorLeft.getCurrentPosition() + (int) (backwardInches * bot.COUNTS_PER_INCH);
+
+            bot.motorRight.setTargetPosition(newRightTarget);
+            bot.motorLeft.setTargetPosition(newLeftTarget);
+
+            bot.setRunToPositionMode();
+            bot.driveBackward(driveSpeed);
+
+            while (opModeIsActive() && bot.isBusy()) {
+                float newAngle = bot.getCurrentAngle();
+                if (newAngle != maintainAngle && Math.abs(newAngle - maintainAngle) > 1) {
+                    if (newAngle < maintainAngle) {
+                        // bot veered right. give less power to the left motor.
+                        bot.driveBackward(driveSpeed, bot.LEAN_LEFT);
+                    } else {
+                        // bot veered left. give less power to the right motor.
+                        bot.driveBackward(driveSpeed, bot.LEAN_RIGHT);
+                    }
+                } else {
+                    bot.driveBackward(driveSpeed, bot.GO_STRAIGHT);
+                }
+
+                double endAngle = bot.getCurrentAngle();
+                int endPositionLeft = bot.motorLeft.getCurrentPosition();
+                int endPositionRight = bot.motorRight.getCurrentPosition();
+
+                telemetry.addData("Angle: ", "Start: " + maintainAngle + " End: " + endAngle);
+                telemetry.addData("End Position: ", "Left: " + endPositionLeft + " Right: " + endPositionRight);
+                telemetry.update();
+            }
+
+            bot.stopDriving();
+            bot.setUseEncoderMode();
+        }
+    }
 
     void driveBackwardDistance(int backwardInches, double driveSpeed) {
         driveForwardDistance(-1 * backwardInches, driveSpeed);
