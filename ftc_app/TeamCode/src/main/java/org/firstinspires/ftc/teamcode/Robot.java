@@ -67,7 +67,7 @@ public class Robot {
     static final double AUTO_DRIVE_SPEED_SLOW   = 0.25;
     static final double AUTO_DRIVE_SPEED_NORMAL = 0.5;
     static final double AUTO_DRIVE_SPEED_FAST   = 1.0;
-    static final double CLAW_SPEED              = 1;
+    static final double CLAW_SPEED              = 0.7;
     static final double TELESCOPIC_ARM_SPEED    = 1;
     static final double AUTO_TURN_SPEED_SLOW    = 0.15;
     static final double AUTO_TURN_SPEED_NORMAL  = 0.3;
