@@ -63,11 +63,6 @@ public abstract class AutoOpBase extends LinearOpMode {
 
         // Hold glyph.
         bot.clampGlyph();
-
-//        // Lift the arm a bit.
-//        bot.moveClawLifterUp(1);
-//        sleep(700);
-//        bot.resetClawLifter();
     }
 
     void driveForwardDistance(double maintainAngle, int forwardInches, double driveSpeed) {
@@ -97,11 +92,8 @@ public abstract class AutoOpBase extends LinearOpMode {
                 }
 
                 double endAngle = bot.getCurrentAngle();
-                int endPositionLeft = bot.motorLeft.getCurrentPosition();
-                int endPositionRight = bot.motorRight.getCurrentPosition();
 
                 telemetry.addData("Angle: ", "Start: " + maintainAngle + " End: " + endAngle);
-                telemetry.addData("End Position: ", "Left: " + endPositionLeft + " Right: " + endPositionRight);
                 telemetry.update();
             }
 
@@ -162,11 +154,8 @@ public abstract class AutoOpBase extends LinearOpMode {
                 }
 
                 double endAngle = bot.getCurrentAngle();
-                int endPositionLeft = bot.motorLeft.getCurrentPosition();
-                int endPositionRight = bot.motorRight.getCurrentPosition();
 
                 telemetry.addData("Angle: ", "Start: " + maintainAngle + " End: " + endAngle);
-                telemetry.addData("End Position: ", "Left: " + endPositionLeft + " Right: " + endPositionRight);
                 telemetry.update();
             }
 
@@ -177,30 +166,6 @@ public abstract class AutoOpBase extends LinearOpMode {
 
     void driveBackwardDistance(int backwardInches, double driveSpeed) {
         driveForwardDistance(-1 * backwardInches, driveSpeed);
-    }
-
-    void turnLeftDistance(int forwardInches) {
-        int newRightTarget;
-        int newLeftTarget;
-
-        if (opModeIsActive()) {
-            newRightTarget = bot.motorRight.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
-            newLeftTarget = bot.motorLeft.getCurrentPosition() + (int)(forwardInches * bot.COUNTS_PER_INCH);
-
-            bot.motorRight.setTargetPosition(newRightTarget);
-            bot.motorLeft.setTargetPosition(-1 * newLeftTarget);
-
-            bot.setRunToPositionMode();
-
-            bot.turnLeft(bot.AUTO_TURN_SPEED_SLOW);
-
-            while (opModeIsActive() && bot.isBusy()) {
-                // Do nothing.
-            }
-
-            bot.stopDriving();
-            bot.setUseEncoderMode();
-        }
     }
 
     /**
@@ -231,7 +196,7 @@ public abstract class AutoOpBase extends LinearOpMode {
         bot.setUseEncoderMode();
     }
 
-    void turnLeftToAngleLocal(double targetAngle) {
+    private void turnLeftToAngleLocal(double targetAngle) {
         float currentAngle = bot.getCurrentAngle();
         if (opModeIsActive() && currentAngle < targetAngle) {
             bot.autoOpTurnLeft(bot.AUTO_TURN_SPEED_NORMAL);
@@ -275,7 +240,7 @@ public abstract class AutoOpBase extends LinearOpMode {
         bot.setUseEncoderMode();
     }
 
-    void turnRightToAngleLocal(double targetAngle) {
+    private void turnRightToAngleLocal(double targetAngle) {
         float currentAngle = bot.getCurrentAngle();
         if (opModeIsActive() && targetAngle < currentAngle) {
             bot.turnRight(bot.AUTO_TURN_SPEED_NORMAL);
@@ -305,7 +270,6 @@ public abstract class AutoOpBase extends LinearOpMode {
             telemetry.addData("VuMark", "%s visible", vuMark);
 
             OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) bot.relicTemplate.getListener()).getPose();
-            telemetry.addData("Pose", format(pose));
 
             /* We further illustrate how to decompose the pose into useful rotational and
              * translational components */
@@ -330,10 +294,6 @@ public abstract class AutoOpBase extends LinearOpMode {
 
         telemetry.update();
         return vuMark;
-    }
-
-    String format(OpenGLMatrix transformationMatrix) {
-        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
 
     boolean isLeftJewelRed() {
@@ -380,11 +340,8 @@ public abstract class AutoOpBase extends LinearOpMode {
                 }
 
                 double endAngle = bot.getCurrentAngle();
-                int endPositionLeft = bot.motorLeft.getCurrentPosition();
-                int endPositionRight = bot.motorRight.getCurrentPosition();
 
                 telemetry.addData("Angle: ", "Start: " + maintainAngle + " End: " + endAngle);
-                telemetry.addData("End Position: ", "Left: " + endPositionLeft + " Right: " + endPositionRight);
                 telemetry.update();
             }
 
