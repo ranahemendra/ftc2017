@@ -35,8 +35,10 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -94,6 +96,11 @@ public class Robot {
 
     Servo jewelKnocker;
 
+    DcMotor leftGLyphWheel;
+    DcMotor rightGlyphWheel;
+
+    DigitalChannel glyphSensor;
+
     // sometimes it helps to multiply the raw RGB values with a scale factor
     // to amplify/attentuate the measured values.
     final double SCALE_FACTOR = 255;
@@ -136,11 +143,17 @@ public class Robot {
         leftClaw = hardwareMap.servo.get("clawLeft");
         rightClaw = hardwareMap.servo.get("clawRight");
         telescopicArmMotor = hardwareMap.dcMotor.get("telescopic_arm_motor");
+        glyphSensor = hardwareMap.digitalChannel.get("glyphSensor");
+        glyphSensor.setMode(DigitalChannel.Mode.INPUT);
+
 
         relicArm = hardwareMap.dcMotor.get("relic_arm");
         relicHolder = hardwareMap.servo.get("relic_holder");
 
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
+
+        leftGLyphWheel = hardwareMap.dcMotor.get("left_glyph_wheel");
+        rightGlyphWheel = hardwareMap.dcMotor.get("right_glyph_wheel");
 
         // get a reference to the jewel color sensor.
         jewelColorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
@@ -313,15 +326,18 @@ public class Robot {
         rightClaw.setPosition(1);
     }
 
+    boolean isGlyphClamped = false;
     void clampGlyph() {
-        leftClaw.setPosition(1);
-        rightClaw.setPosition(0);
+        leftClaw.setPosition(0.25);
+        rightClaw.setPosition(0.75);
+        isGlyphClamped = true;
     }
 
     void unclampGlyph() {
 //        resetGlyphHolder();
         leftClaw.setPosition(0.1);
         rightClaw.setPosition(0.9);
+        isGlyphClamped = false;
     }
 
     void resetTelescopicArm() {
@@ -408,8 +424,27 @@ public class Robot {
         return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
     }
 
+    void suckGlyphIn(){
+        leftGLyphWheel.setPower(-0.5);
+        rightGlyphWheel.setPower(0.5);
+    }
+
+    void shootGlyphOut(){
+        leftGLyphWheel.setPower(0.5);
+        rightGlyphWheel.setPower(-0.5);
+    }
+
+    void stopGlyphWheels(){
+        leftGLyphWheel.setPower(0);
+        rightGlyphWheel.setPower(0);
+    }
+
     public Acceleration getNewGravity() {
         return imu.getGravity();
+    }
+
+    boolean isGlyphClamped() {
+        return isGlyphClamped;
     }
 }
 

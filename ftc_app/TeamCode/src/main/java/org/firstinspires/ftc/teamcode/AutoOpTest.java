@@ -73,14 +73,13 @@ public class AutoOpTest extends AutoOpBase {
         telemetry.addData("End Position: ", "Left: " + endPositionLeft + " Right: " + endPositionRight);
         telemetry.update();
 
-        turnRightToAngleLocal(-84);
+        turnRightToAngle(-84);
 
         while (opModeIsActive()) {
             // Keep this going.
             idle();
         }
     }
-
 
     void driveForwardDistance(int forwardInches, double driveSpeed) {
         float startAngle = bot.getCurrentAngle();
