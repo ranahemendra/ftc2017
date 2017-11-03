@@ -74,21 +74,13 @@ public class DriverOpControl extends LinearOpMode {
         if(gamepad1.x){
             bot.clampGlyph();
         } else if (gamepad1.b){
-            bot.shootGlyphOut();
-            sleep(500);
-            bot.stopGlyphWheels();
             bot.unclampGlyph();
         }
 
-        telemetry.addData("Glyph clamped", bot.isGlyphClamped());
-        if (bot.isGlyphClamped()) {
-            boolean isGlyphIn = ! bot.glyphSensor.getState();
-            telemetry.addData("Glyph In", isGlyphIn);
-            if (isGlyphIn) {
-                bot.stopGlyphWheels();
-            } else {
-                bot.suckGlyphIn();
-            }
+        if (gamepad1.left_bumper) {
+            bot.suckGlyphIn();
+        } else if (gamepad1.right_bumper){
+            bot.shootGlyphOut();
         } else {
             bot.stopGlyphWheels();
         }
