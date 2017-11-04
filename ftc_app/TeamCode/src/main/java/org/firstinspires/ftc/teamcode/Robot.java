@@ -328,13 +328,13 @@ public class Robot {
 
     void clampGlyph() {
         leftClaw.setPosition(0.25);
-        rightClaw.setPosition(0.75);
+        rightClaw.setPosition(0.70);
     }
 
     void unclampGlyph() {
 //        resetGlyphHolder();
         leftClaw.setPosition(0.1);
-        rightClaw.setPosition(0.9);
+        rightClaw.setPosition(0.8);
     }
 
     void resetTelescopicArm() {
