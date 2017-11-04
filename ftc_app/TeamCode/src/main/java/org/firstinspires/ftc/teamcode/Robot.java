@@ -326,18 +326,15 @@ public class Robot {
         rightClaw.setPosition(1);
     }
 
-    boolean isGlyphClamped = false;
     void clampGlyph() {
         leftClaw.setPosition(0.25);
         rightClaw.setPosition(0.75);
-        isGlyphClamped = true;
     }
 
     void unclampGlyph() {
 //        resetGlyphHolder();
         leftClaw.setPosition(0.1);
         rightClaw.setPosition(0.9);
-        isGlyphClamped = false;
     }
 
     void resetTelescopicArm() {
@@ -384,18 +381,6 @@ public class Robot {
         }
     }
 
-    //----------------------------------------------------------------------------------------------
-    // Formatting
-    //----------------------------------------------------------------------------------------------
-
-    String formatAngle(AngleUnit angleUnit, double angle) {
-        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
-    }
-
-    String formatDegrees(double degrees){
-        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
-    }
-
     ColorSensor getJewelColorSensorOutput() {
         // convert the RGB values to HSV values.
         // multiply by the SCALE_FACTOR.
@@ -437,14 +422,6 @@ public class Robot {
     void stopGlyphWheels(){
         leftGLyphWheel.setPower(0);
         rightGlyphWheel.setPower(0);
-    }
-
-    public Acceleration getNewGravity() {
-        return imu.getGravity();
-    }
-
-    boolean isGlyphClamped() {
-        return isGlyphClamped;
     }
 }
 
