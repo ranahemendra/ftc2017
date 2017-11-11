@@ -60,9 +60,6 @@ public abstract class AutoOpBase extends LinearOpMode {
 
         // We will use encoders for driving distance.
         bot.setUseEncoderMode();
-
-        // Hold glyph.
-        bot.clampGlyph();
     }
 
     void driveForwardDistance(double maintainAngle, int forwardInches, double driveSpeed) {
