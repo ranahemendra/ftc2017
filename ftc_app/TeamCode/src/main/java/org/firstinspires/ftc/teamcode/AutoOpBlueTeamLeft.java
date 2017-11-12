@@ -40,6 +40,19 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
     public void runOpMode() throws InterruptedException {
         initBot();
 
+        // Move this to initBot().
+        bot.unclampGlyph();
+        int clawUpDown = 3000;
+        bot.moveClawLifterDown(bot.CLAW_SPEED);
+        sleep(clawUpDown);
+
+        // Hold glyph.
+        bot.clampGlyph();
+        clawUpDown = 3000;
+        bot.moveClawLifterUp(bot.CLAW_SPEED);
+        sleep(clawUpDown);
+        bot.resetClawLifter();
+
         // wait for the start button to be pressed.
         waitForStart();
 
@@ -51,7 +64,6 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         // Wait for the servo to move.
         sleep(600);
 
-
         // scans right jewel
         boolean leftJewelRed = isLeftJewelRed();
 
@@ -62,14 +74,14 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
             sleep(500);
             driveBackwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
-            driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
             driveBackwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
         // Go back a few inches to align with the balancing stone
-        driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(10, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Come back to the original position.
         driveBackwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
@@ -77,12 +89,15 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         // Turn Left.
         turnLeftToAngle(85);
 
-        //Go Back so turn will not move the bot forward so much that it misses the cryptobox slot.
-        driveBackwardDistance(9, bot.AUTO_DRIVE_SPEED_NORMAL);
+       //continue going back to align with wall
+        driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
+
+        //go back to original position
+        driveForwardDistance(12, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Vumark", scannedVuMark);
 
-        int driveDistance = 3;
+        int driveDistance = 2;
         if(scannedVuMark == scannedVuMark.RIGHT) {
             driveDistance += 14;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -91,18 +106,22 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
             // Don't do anything.
         }
 
+        driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
+
         // Turn Left.
-        turnLeftToAngle(82);
+        turnLeftToAngle(179);
         driveForwardDistance(5, bot.AUTO_DRIVE_SPEED_SLOW);
         // Drive forward to the cryptobox
 
 
         bot.unclampGlyph();
 
-        driveBackwardDistance(4, bot.AUTO_DRIVE_SPEED_NORMAL);
-
+        driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_NORMAL);
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();
+
+        driveForwardDistance(5, bot.AUTO_DRIVE_SPEED_SLOW);
+        // Drive forward to the cryptobox again
 
         while (opModeIsActive()) {
             // Keep this going.
