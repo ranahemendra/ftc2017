@@ -322,8 +322,7 @@ public class Robot {
     }
 
     void resetGlyphHolder() {
-        leftClaw.setPosition(0);
-        rightClaw.setPosition(1);
+        unclampGlyph();
     }
 
     void clampGlyph() {
@@ -345,6 +344,10 @@ public class Robot {
         telescopicArmMotor.setPower(power);
     }
 
+    void retractTelescopicArm (double power){
+        extendTelescopicArm(-power);
+    }
+
     // Initializing continuous rotation servo
     void stopRelicArm() {
         relicArm.setPower(0);
@@ -362,7 +365,7 @@ public class Robot {
     }
 
     void resetRelicHolder() {
-        relicHolder.setPosition(0.5);
+        relicHolder.setPosition(1);
     }
 
     void grabRelic() throws InterruptedException{

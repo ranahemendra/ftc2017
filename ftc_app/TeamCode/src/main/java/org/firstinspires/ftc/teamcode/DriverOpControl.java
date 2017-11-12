@@ -97,6 +97,8 @@ public class DriverOpControl extends LinearOpMode {
     void manageTelescopicArm() {
         if(gamepad2.y) {
             bot.extendTelescopicArm(bot.TELESCOPIC_ARM_SPEED);
+        } else if(gamepad2.a){
+            bot.retractTelescopicArm(bot.TELESCOPIC_ARM_SPEED);
         } else {
             bot.extendTelescopicArm(0);
         }

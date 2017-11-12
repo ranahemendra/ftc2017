@@ -79,12 +79,12 @@ public class AutoOpRedTeamRight extends AutoOpBase {
             driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(currentAngle, 20, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(currentAngle, 17, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
             driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(currentAngle, 26, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(currentAngle, 23, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
         // Go back a few inches to align with the balancing stone
@@ -98,7 +98,7 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         turnLeftToAngle(currentAngle);
 
         // Back up all the way to the wall.
-        driveBackwardDistance(28, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         int driveDistance = 24;
         if(scannedVuMark == scannedVuMark.LEFT) {
