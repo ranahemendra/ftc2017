@@ -59,7 +59,7 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         sleep(500);
         bot.stopGlyphWheels();
         bot.moveClawLifterUp(bot.CLAW_SPEED);
-        sleep(3000);
+        sleep(2500);
         bot.resetClawLifter();
 
         // wait for the start button to be pressed.
