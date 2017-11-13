@@ -49,13 +49,17 @@ public class AutoOpRedTeamRight extends AutoOpBase {
 
         // Move this to initBot().
         bot.unclampGlyph();
-        int clawUpDown = 2000;
         bot.moveClawLifterDown(bot.CLAW_SPEED);
-        sleep(clawUpDown);
+        sleep(2000);
+        bot.resetClawLifter();
+
         // Hold glyph.
         bot.clampGlyph();
+        bot.suckGlyphIn();
+        sleep(500);
+        bot.stopGlyphWheels();
         bot.moveClawLifterUp(bot.CLAW_SPEED);
-        sleep(clawUpDown);
+        sleep(3000);
         bot.resetClawLifter();
 
         // wait for the start button to be pressed.
@@ -84,11 +88,11 @@ public class AutoOpRedTeamRight extends AutoOpBase {
             driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(currentAngle, 23, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(currentAngle, 23, bot.AUTO_DRIVE_SPEED_NORMAL);
         }
 
         // Go back a few inches to align with the balancing stone
-        driveBackwardDistance(11, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(14, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Come back to the original position.
         driveForwardDistance(currentAngle, 4, bot.AUTO_DRIVE_SPEED_NORMAL);
@@ -100,11 +104,11 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         // Back up all the way to the wall.
         driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        int driveDistance = 24;
+        int driveDistance = 15;
         if(scannedVuMark == scannedVuMark.LEFT) {
             driveDistance += 15;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
-            driveDistance += 8;
+            driveDistance += 7;
         } else if (scannedVuMark == scannedVuMark.RIGHT) {
             // Don't do anything.
         }
@@ -114,12 +118,12 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         driveForwardDistance(currentAngle, driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn right.
-        currentAngle = 0;
+        currentAngle = 25;
         turnRightToAngle(currentAngle);
         driveForwardDistance(currentAngle, 8, bot.AUTO_DRIVE_SPEED_SLOW);
 
-        bot.unclampGlyph();
         bot.shootGlyphOut();
+        bot.unclampGlyph();
         sleep(100);
         bot.stopGlyphWheels();
 
