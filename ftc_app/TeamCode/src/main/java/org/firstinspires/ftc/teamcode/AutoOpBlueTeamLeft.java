@@ -81,7 +81,7 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         }
 
         // Go back a few inches to align with the balancing stone
-        driveForwardDistance(10, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(14, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Come back to the original position.
         driveBackwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
@@ -97,7 +97,7 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
 
         telemetry.addData("Vumark", scannedVuMark);
 
-        int driveDistance = 2;
+        int driveDistance = 9;
         if(scannedVuMark == scannedVuMark.RIGHT) {
             driveDistance += 14;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
