@@ -60,6 +60,8 @@ public abstract class AutoOpBase extends LinearOpMode {
 
         // We will use encoders for driving distance.
         bot.setUseEncoderMode();
+
+        bot.moveJewelKnockerDown();
     }
 
     void driveForwardDistance(double maintainAngle, int forwardInches, double driveSpeed) {

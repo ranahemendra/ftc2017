@@ -48,6 +48,9 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
 
         // Hold glyph.
         bot.clampGlyph();
+        bot.suckGlyphIn();
+        sleep(500);
+        bot.stopGlyphWheels();
         clawUpDown = 3000;
         bot.moveClawLifterUp(bot.CLAW_SPEED);
         sleep(clawUpDown);

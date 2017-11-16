@@ -305,8 +305,12 @@ public class Robot {
         jewelKnocker.setPosition(0);
     }
 
-    void moveJewelKnockerDown() {
-        jewelKnocker.setPosition(0.8);
+    // move jewel knocker in many sections with pauses in-between in order to decrease momentum that could knock the wrong jewel out with a glancing strike.
+    void moveJewelKnockerDown() throws InterruptedException {
+        while (jewelKnocker.getPosition() <= 0.8) {
+            jewelKnocker.setPosition(jewelKnocker.getPosition() + 0.1);
+            Thread.sleep(200);
+        }
     }
 
     void moveClawLifterUp(double power) {
