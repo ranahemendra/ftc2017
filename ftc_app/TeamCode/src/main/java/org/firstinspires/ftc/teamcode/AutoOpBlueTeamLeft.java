@@ -96,11 +96,11 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         //go back to original position
-        driveForwardDistance(12, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(7, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Vumark", scannedVuMark);
 
-        int driveDistance = 9;
+        int driveDistance = 3;
         if(scannedVuMark == scannedVuMark.RIGHT) {
             driveDistance += 14;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -112,19 +112,26 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn Left.
-        turnLeftToAngle(179);
-        driveForwardDistance(5, bot.AUTO_DRIVE_SPEED_SLOW);
+        turnLeftToAngle(135);
+        driveForwardDistance(13, bot.AUTO_DRIVE_SPEED_SLOW);
         // Drive forward to the cryptobox
 
+        //shoots glyph out
 
+        bot.shootGlyphOut();
         bot.unclampGlyph();
+        sleep(100);
+        bot.stopGlyphWheels();
 
-        driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
+
+        // Drive forward to the cryptobox again
+        driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_SLOW);
+
+        driveBackwardDistance(5, bot.AUTO_DRIVE_SPEED_NORMAL);
+
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();
-
-        driveForwardDistance(5, bot.AUTO_DRIVE_SPEED_SLOW);
-        // Drive forward to the cryptobox again
 
         while (opModeIsActive()) {
             // Keep this going.
