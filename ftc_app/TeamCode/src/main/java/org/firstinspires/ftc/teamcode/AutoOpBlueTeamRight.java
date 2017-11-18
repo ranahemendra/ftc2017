@@ -90,7 +90,7 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
         }
 
         // Go back a few inches to align with the balancing stone
-        driveForwardDistance(15, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(18, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Come back to the original position.
         driveBackwardDistance(15, bot.AUTO_DRIVE_SPEED_NORMAL);
@@ -100,11 +100,11 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
 
         // go to distance slightly over corresponding section of cryptobox
         int driveDistance = 4;
-        if(scannedVuMark == scannedVuMark.LEFT) {
+        if(scannedVuMark == scannedVuMark.RIGHT) {
             driveDistance += 14;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
             driveDistance += 7;
-        } else if (scannedVuMark == scannedVuMark.RIGHT) {
+        } else if (scannedVuMark == scannedVuMark.LEFT) {
             // Don't do anything.
         }
 
