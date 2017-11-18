@@ -74,9 +74,11 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
         // scans right jewel
         boolean leftJewelRed = isLeftJewelRed();
 
+        //get off balancing stone
+
         if (leftJewelRed) {
             // move forward
-            driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(2000);
             driveBackwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
@@ -84,11 +86,11 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
             driveForwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(2000);
-            driveBackwardDistance(25, bot.AUTO_DRIVE_SPEED_NORMAL);
+            driveBackwardDistance(24, bot.AUTO_DRIVE_SPEED_NORMAL);
         }
 
         // Go back a few inches to align with the balancing stone
-        driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(15, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Come back to the original position.
         driveBackwardDistance(15, bot.AUTO_DRIVE_SPEED_NORMAL);
@@ -97,7 +99,7 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
         telemetry.addData("Vumark", scannedVuMark);
 
         // go to distance slightly over corresponding section of cryptobox
-        int driveDistance = 9;
+        int driveDistance = 4;
         if(scannedVuMark == scannedVuMark.LEFT) {
             driveDistance += 14;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -110,14 +112,19 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
         driveBackwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn right.
-        turnRightToAngle(-70);
+        turnRightToAngle(-55);
         driveForwardDistance(10, bot.AUTO_DRIVE_SPEED_SLOW);
 
+        bot.shootGlyphOut();
         bot.unclampGlyph();
+        sleep(100);
+        bot.stopGlyphWheels();
 
         driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        driveForwardDistance(5, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_NORMAL);
+
+        driveBackwardDistance(7, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();
