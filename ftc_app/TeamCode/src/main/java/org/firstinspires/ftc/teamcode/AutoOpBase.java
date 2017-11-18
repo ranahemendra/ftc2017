@@ -65,17 +65,7 @@ public abstract class AutoOpBase extends LinearOpMode {
     }
 
     void startBot() throws InterruptedException {
-        // Hold glyph.
-        bot.clampGlyph();
-        bot.suckGlyphIn();
-        sleep(500);
-        bot.stopGlyphWheels();
-        bot.moveClawLifterUp(bot.CLAW_SPEED);
-        sleep(2500);
-        bot.resetClawLifter();
-
         bot.moveJewelKnockerDown();
-
         bot.relicTrackables.activate();
         scannedVuMark = scanVumarks(1);
 
@@ -85,8 +75,14 @@ public abstract class AutoOpBase extends LinearOpMode {
         telemetry.addData("Color", "Left Red: " + leftJewelRed);
         telemetry.update();
 
-        // Wait for servo to move back up and the telemetry to show.
-        sleep(1000);
+        // Hold glyph.
+        bot.clampGlyph();
+        bot.suckGlyphIn();
+        sleep(500);
+        bot.stopGlyphWheels();
+        bot.moveClawLifterUp(bot.CLAW_SPEED);
+        sleep(2500);
+        bot.resetClawLifter();
     }
 
     void driveForwardDistance(double maintainAngle, int forwardInches, double driveSpeed) {

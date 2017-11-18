@@ -79,7 +79,7 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         // Back up all the way to the wall.
         driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        int driveDistance = 14;
+        int driveDistance = 13;
         if(scannedVuMark == scannedVuMark.LEFT) {
             driveDistance += 15;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -90,7 +90,7 @@ public class AutoOpRedTeamRight extends AutoOpBase {
 
         // Drive forward to the cryptobox
         currentAngle = bot.getCurrentAngle();
-        driveForwardDistance(currentAngle, driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
+        driveForwardDistance(currentAngle, driveDistance, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Turn right.
         currentAngle = 25;
