@@ -46,39 +46,12 @@ public class AutoOpRedTeamRight extends AutoOpBase {
     public void runOpMode() throws InterruptedException {
         initBot();
 
-
-        // Move this to initBot().
-        bot.unclampGlyph();
-        bot.moveClawLifterDown(bot.CLAW_SPEED);
-        sleep(2000);
-        bot.resetClawLifter();
-
-        // Hold glyph.
-        bot.clampGlyph();
-        bot.suckGlyphIn();
-        sleep(500);
-        bot.stopGlyphWheels();
-        bot.moveClawLifterUp(bot.CLAW_SPEED);
-        sleep(2500);
-        bot.resetClawLifter();
-
         // wait for the start button to be pressed.
         waitForStart();
 
-        bot.relicTrackables.activate();
-        RelicRecoveryVuMark scannedVuMark = scanVumarks(1);
+        startBot();
 
-        bot.moveJewelKnockerDown();
-
-        boolean leftJewelRed = isLeftJewelRed();
-
-        telemetry.addData("Vumark", scannedVuMark);
-        telemetry.addData("Color", "Left Red: " + leftJewelRed);
-        telemetry.update();
-
-        // Wait for servo to move back up and the telemetry to show.
-        sleep(2000);
-
+        //get off balancing stone
         float currentAngle = bot.getCurrentAngle();
         if (leftJewelRed) {
             // move forward

@@ -47,6 +47,8 @@ public abstract class AutoOpBase extends LinearOpMode {
     static final int BLUE = 1;
 
     Robot bot = new Robot();
+    RelicRecoveryVuMark scannedVuMark;
+    boolean leftJewelRed;
 
     void initBot() throws InterruptedException {
         // Initialize the drive system variables.
@@ -60,8 +62,31 @@ public abstract class AutoOpBase extends LinearOpMode {
 
         // We will use encoders for driving distance.
         bot.setUseEncoderMode();
+    }
+
+    void startBot() throws InterruptedException {
+        // Hold glyph.
+        bot.clampGlyph();
+        bot.suckGlyphIn();
+        sleep(500);
+        bot.stopGlyphWheels();
+        bot.moveClawLifterUp(bot.CLAW_SPEED);
+        sleep(2500);
+        bot.resetClawLifter();
 
         bot.moveJewelKnockerDown();
+
+        bot.relicTrackables.activate();
+        scannedVuMark = scanVumarks(1);
+
+        leftJewelRed = isLeftJewelRed();
+
+        telemetry.addData("Vumark", scannedVuMark);
+        telemetry.addData("Color", "Left Red: " + leftJewelRed);
+        telemetry.update();
+
+        // Wait for servo to move back up and the telemetry to show.
+        sleep(1000);
     }
 
     void driveForwardDistance(double maintainAngle, int forwardInches, double driveSpeed) {

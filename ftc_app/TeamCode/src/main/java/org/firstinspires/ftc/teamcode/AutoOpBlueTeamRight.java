@@ -46,36 +46,12 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
     public void runOpMode() throws InterruptedException {
         initBot();
 
-        //During INIT Bot we move Jewel Knocker Down
-
-        // Move this to initBot().
-        bot.unclampGlyph();
-        int clawUpDown = 3000;
-        bot.moveClawLifterDown(bot.CLAW_SPEED);
-        sleep(clawUpDown);
-
-        // Hold glyph.
-        bot.clampGlyph();
-        bot.suckGlyphIn();
-        sleep(500);
-        bot.stopGlyphWheels();clawUpDown = 3000;
-        bot.moveClawLifterUp(bot.CLAW_SPEED);
-        sleep(clawUpDown);
-        bot.resetClawLifter();
-
         // wait for the start button to be pressed.
         waitForStart();
 
-        // scan VuMark
-        bot.relicTrackables.activate();
-        RelicRecoveryVuMark scannedVuMark = scanVumarks(1);
-
-
-        // scans right jewel
-        boolean leftJewelRed = isLeftJewelRed();
+        startBot();
 
         //get off balancing stone
-
         if (leftJewelRed) {
             // move forward
             driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);

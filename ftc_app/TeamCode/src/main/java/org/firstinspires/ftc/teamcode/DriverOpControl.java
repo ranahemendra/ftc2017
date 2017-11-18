@@ -24,9 +24,9 @@ public class DriverOpControl extends LinearOpMode {
         while(opModeIsActive()){
             manageChassis();
             manageClaw();
-            manageTelescopicArm();
-            manageRelicArm();
-            manageRelicHolder();
+//            manageTelescopicArm();
+//            manageRelicArm();
+//            manageRelicHolder();
             idle();
             telemetry.update();
         }
@@ -71,23 +71,23 @@ public class DriverOpControl extends LinearOpMode {
     void manageClaw() {
         // The code to manage the claw goes here.
         //later, make it open a little less, so when drop the glyph in cryptobox, doesn't knock others off
-        if(gamepad1.x){
+        if(gamepad1.x || gamepad2.x){
             bot.clampGlyph();
-        } else if (gamepad1.b){
+        } else if (gamepad1.b || gamepad2.b){
             bot.unclampGlyph();
         }
 
-        if (gamepad1.left_bumper) {
+        if (gamepad1.left_bumper || gamepad2.left_bumper) {
             bot.suckGlyphIn();
-        } else if (gamepad1.right_bumper){
+        } else if (gamepad1.right_bumper || gamepad2.right_bumper){
             bot.shootGlyphOut();
         } else {
             bot.stopGlyphWheels();
         }
 
-        if(gamepad1.y) {
+        if(gamepad1.y || gamepad2.y) {
             bot.moveClawLifterUp(bot.CLAW_SPEED);
-        } else if(gamepad1.a){
+        } else if(gamepad1.a || gamepad2.a){
             bot.moveClawLifterDown(bot.CLAW_SPEED);
         } else {
             bot.resetClawLifter();
