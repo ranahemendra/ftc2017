@@ -61,33 +61,32 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         RelicRecoveryVuMark scannedVuMark = scanVumarks(1);
 
         bot.moveJewelKnockerDown();
-        // Wait for the servo to move.
-        sleep(600);
 
         boolean leftJewelRed = isLeftJewelRed();
+
+        telemetry.addData("Vumark", scannedVuMark);
         telemetry.addData("Color", "Left Red: " + leftJewelRed);
         telemetry.update();
-        sleep(500);
+
+        // Wait for servo to move back up and the telemetry to show.
+        sleep(2000);
 
         float currentAngle = bot.getCurrentAngle();
         if (leftJewelRed) {
             // move forward
-            driveForwardDistance(currentAngle, 3, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(currentAngle, 2, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(currentAngle, 17, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(currentAngle, 18, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
-            driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(currentAngle, 23, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(currentAngle, 24, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
         // Go back a few inches to align with the balancing stone
-        driveBackwardDistance(14, bot.AUTO_DRIVE_SPEED_NORMAL);
-
-        telemetry.addData("Vumark", scannedVuMark);
-        telemetry.update();
+        driveBackwardDistance(13, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         int driveDistance = 0;
         if(scannedVuMark == scannedVuMark.LEFT) {
@@ -115,8 +114,7 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         sleep(1000);
         driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        telemetry.addData("Time taken", getRuntime());
-        telemetry.update();
+        driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         while (opModeIsActive()) {
             // Keep this going.

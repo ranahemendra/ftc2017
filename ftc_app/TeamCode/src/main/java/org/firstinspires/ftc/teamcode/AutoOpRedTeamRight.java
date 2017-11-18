@@ -69,13 +69,15 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         RelicRecoveryVuMark scannedVuMark = scanVumarks(1);
 
         bot.moveJewelKnockerDown();
-        // Wait for the servo to move.
-        sleep(600);
 
         boolean leftJewelRed = isLeftJewelRed();
+
+        telemetry.addData("Vumark", scannedVuMark);
         telemetry.addData("Color", "Left Red: " + leftJewelRed);
         telemetry.update();
-        sleep(500);
+
+        // Wait for servo to move back up and the telemetry to show.
+        sleep(2000);
 
         float currentAngle = bot.getCurrentAngle();
         if (leftJewelRed) {
@@ -85,10 +87,10 @@ public class AutoOpRedTeamRight extends AutoOpBase {
             sleep(500);
             driveForwardDistance(currentAngle, 17, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
-            driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(currentAngle, 23, bot.AUTO_DRIVE_SPEED_NORMAL);
+            driveForwardDistance(currentAngle, 22, bot.AUTO_DRIVE_SPEED_NORMAL);
         }
 
         // Go back a few inches to align with the balancing stone
@@ -104,7 +106,7 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         // Back up all the way to the wall.
         driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        int driveDistance = 15;
+        int driveDistance = 14;
         if(scannedVuMark == scannedVuMark.LEFT) {
             driveDistance += 15;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -130,6 +132,9 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
         sleep(500);
         driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
+
+        driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
+
 
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();
