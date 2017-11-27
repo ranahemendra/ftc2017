@@ -76,7 +76,7 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         driveForwardDistance(currentAngle, driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn right.
-        currentAngle = -65;
+        currentAngle = -70;
         turnRightToAngle(currentAngle);
         driveForwardDistance(currentAngle, 8, bot.AUTO_DRIVE_SPEED_SLOW);
 

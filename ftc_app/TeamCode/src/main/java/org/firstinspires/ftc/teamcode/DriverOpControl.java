@@ -58,11 +58,11 @@ public class DriverOpControl extends LinearOpMode {
         }
 
         if (leftStickX > 0) {
-            bot.turnRight(leftStickX/2);
+            bot.turnRight(leftStickX);
         }
 
         if(leftStickX < 0){
-            bot.turnLeft(leftStickX/2);
+            bot.turnLeft(leftStickX);
         }
 
         telemetry.addData("DT: ", "LT: %7f, RT: %7f, Turn: %7f", leftTrigger, rightTrigger, leftStickX);
@@ -86,42 +86,46 @@ public class DriverOpControl extends LinearOpMode {
         }
 
         if(gamepad1.y || gamepad2.y) {
-            bot.moveClawLifterUp(bot.CLAW_SPEED);
-        } else if(gamepad1.a || gamepad2.a){
+            if (bot.clawLifter.getCurrentPosition() < 13000) {
+                bot.moveClawLifterUp(bot.CLAW_SPEED);
+            }
+        } else if(gamepad1.a || gamepad2.a) {
             bot.moveClawLifterDown(bot.CLAW_SPEED);
         } else {
             bot.resetClawLifter();
         }
+        telemetry.addData("claw lifter encoder: ", bot.clawLifter.getCurrentPosition());
+        telemetry.update();
     }
 
-    void manageTelescopicArm() {
-        if(gamepad2.y) {
-            bot.extendTelescopicArm(bot.TELESCOPIC_ARM_SPEED);
-        } else if(gamepad2.a){
-            bot.retractTelescopicArm(bot.TELESCOPIC_ARM_SPEED);
-        } else {
-            bot.extendTelescopicArm(0);
-        }
-    }
-
-        //relic arm movement
-    void manageRelicArm() throws InterruptedException {
-        if(gamepad2.right_trigger > 0){
-            bot.relicArmUp(gamepad2.right_trigger);
-        } else if(gamepad2.left_trigger > 0){
-            bot.relicArmDown(gamepad2.left_trigger);
-        }  else {
-            bot.stopRelicArm();
-        }
-    }
-
-    void manageRelicHolder() throws InterruptedException {
-        if(gamepad2.x){
-            bot.grabRelic();
-        } else if(gamepad2.b){
-            bot.releaseRelic();
-        }
-    }
-
+//    void manageTelescopicArm() {
+//        if(gamepad2.y) {
+//            bot.extendTelescopicArm(bot.TELESCOPIC_ARM_SPEED);
+//        } else if(gamepad2.a){
+//            bot.retractTelescopicArm(bot.TELESCOPIC_ARM_SPEED);
+//        } else {
+//            bot.extendTelescopicArm(0);
+//        }
+//    }
+//
+//        //relic arm movement
+//    void manageRelicArm() throws InterruptedException {
+//        if(gamepad2.right_trigger > 0){
+//            bot.relicArmUp(gamepad2.right_trigger);
+//        } else if(gamepad2.left_trigger > 0){
+//            bot.relicArmDown(gamepad2.left_trigger);
+//        }  else {
+//            bot.stopRelicArm();
+//        }
+//    }
+//
+//    void manageRelicHolder() throws InterruptedException {
+//        if(gamepad2.x){
+//            bot.grabRelic();
+//        } else if(gamepad2.b){
+//            bot.releaseRelic();
+//        }
+//    }
+//
 
 }

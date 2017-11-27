@@ -69,7 +69,7 @@ public class Robot {
     static final double AUTO_DRIVE_SPEED_SLOW   = 0.25;
     static final double AUTO_DRIVE_SPEED_NORMAL = 0.5;
     static final double AUTO_DRIVE_SPEED_FAST   = 1.0;
-    static final double CLAW_SPEED              = 0.7;
+    static final double CLAW_SPEED              = 1;
     static final double TELESCOPIC_ARM_SPEED    = 1;
     static final double AUTO_TURN_SPEED_SLOW    = 0.15;
     static final double AUTO_TURN_SPEED_NORMAL  = 0.3;
@@ -108,9 +108,6 @@ public class Robot {
     // hsvValues is an array that will hold the hue, saturation, and value information.
     float jewelColorSensorHsvValues[] = {0F, 0F, 0F};
     ColorSensor jewelColorSensor;
-
-    float lineColorSensorHsvValues[] = {0F, 0F, 0F};
-    ColorSensor lineColorSensor;
 
     // The IMU sensor object
     BNO055IMU imu;
@@ -158,12 +155,11 @@ public class Robot {
         // get a reference to the jewel color sensor.
         jewelColorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
 
-        // get a reference to line color sensor.
-        lineColorSensor = hardwareMap.get(ColorSensor.class, "line_color_sensor");
-
         // Set all motors to zero power
         stopDriving();
         resetClawLifter();
+        clawLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         resetGlyphHolder();
 
         // Set the default position of all the servos.
@@ -331,7 +327,7 @@ public class Robot {
 
     void clampGlyph() {
         leftClaw.setPosition(0.25);
-        rightClaw.setPosition(0.60);
+        rightClaw.setPosition(0.63);
     }
 
     void unclampGlyph() {
@@ -398,18 +394,6 @@ public class Robot {
                 jewelColorSensorHsvValues);
 
         return jewelColorSensor;
-    }
-
-    ColorSensor getLineColorSensorOutput() {
-        // convert the RGB values to HSV values.
-        // multiply by the SCALE_FACTOR.
-        // then cast it back to int (SCALE_FACTOR is a double)
-        Color.RGBToHSV((int) (lineColorSensor.red() * SCALE_FACTOR),
-                (int) (lineColorSensor.green() * SCALE_FACTOR),
-                (int) (lineColorSensor.blue() * SCALE_FACTOR),
-                lineColorSensorHsvValues);
-
-        return lineColorSensor;
     }
 
     public float getCurrentAngle() {
