@@ -73,7 +73,7 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         driveForwardDistance(currentAngle, 4, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Turn left
-        currentAngle = 82;
+        currentAngle = 78;
         turnLeftToAngle(currentAngle);
 
         // Back up all the way to the wall.
@@ -93,21 +93,14 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         driveForwardDistance(currentAngle, driveDistance, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Turn right.
-        currentAngle = 25;
+        currentAngle = 22;
         turnRightToAngle(currentAngle);
-        driveForwardDistance(currentAngle, 8, bot.AUTO_DRIVE_SPEED_SLOW);
-
-        bot.shootGlyphOut();
+        driveForwardDistance(currentAngle, 3, bot.AUTO_DRIVE_SPEED_SLOW);
         bot.unclampGlyph();
-        sleep(100);
-        bot.stopGlyphWheels();
-
-        driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
         sleep(500);
-        driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(currentAngle, 2, bot.AUTO_DRIVE_SPEED_SLOW);
 
         driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
-
 
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();

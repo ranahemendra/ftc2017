@@ -57,7 +57,7 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
             driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(currentAngle, 24, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(currentAngle, 24, bot.AUTO_DRIVE_SPEED_NORMAL);
         }
 
         // Go back a few inches to align with the balancing stone
@@ -65,7 +65,7 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
 
         int driveDistance = 0;
         if(scannedVuMark == scannedVuMark.LEFT) {
-            driveDistance += 17;
+            driveDistance += 15;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
             driveDistance += 8;
         } else if (scannedVuMark == scannedVuMark.RIGHT) {
@@ -76,18 +76,12 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         driveForwardDistance(currentAngle, driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn right.
-        currentAngle = -70;
+        currentAngle = -50;
         turnRightToAngle(currentAngle);
-        driveForwardDistance(currentAngle, 8, bot.AUTO_DRIVE_SPEED_SLOW);
-
-        bot.shootGlyphOut();
+        driveForwardDistance(currentAngle, 5, bot.AUTO_DRIVE_SPEED_SLOW);
         bot.unclampGlyph();
-        sleep(100);
-        bot.stopGlyphWheels();
-
-        driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
-        sleep(1000);
-        driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
+        sleep(500);
+        driveForwardDistance(currentAngle, 2, bot.AUTO_DRIVE_SPEED_SLOW);
 
         driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
 

@@ -69,10 +69,17 @@ public class Robot {
     static final double AUTO_DRIVE_SPEED_SLOW   = 0.25;
     static final double AUTO_DRIVE_SPEED_NORMAL = 0.5;
     static final double AUTO_DRIVE_SPEED_FAST   = 1.0;
-    static final double CLAW_SPEED              = 1;
+
+    static final double CLAW_SPEED                      = 1;
+    static final double CLAW_COUNTS_PER_REV             = 1440;
+    static final double CLAW_GEAR_REDUCTION             = 1.0;
+    static final double CLAW_SPINDLE_DIAMETER_INCHES    = 5.25;
+    static final double CLAW_COUNTS_PER_INCH            = (CLAW_COUNTS_PER_REV * CLAW_GEAR_REDUCTION) / (CLAW_SPINDLE_DIAMETER_INCHES * Math.PI);
+
     static final double TELESCOPIC_ARM_SPEED    = 1;
     static final double AUTO_TURN_SPEED_SLOW    = 0.15;
     static final double AUTO_TURN_SPEED_NORMAL  = 0.3;
+    static final double AUTO_TURN_SPEED_FAST    = 1;
 
     static final int LEAN_LEFT                  = -1;
     static final int GO_STRAIGHT                = 0;
@@ -158,7 +165,6 @@ public class Robot {
         // Set all motors to zero power
         stopDriving();
         resetClawLifter();
-        clawLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         resetGlyphHolder();
 
@@ -318,6 +324,7 @@ public class Robot {
     }
 
     void resetClawLifter() {
+        clawLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         clawLifter.setPower(0);
     }
 
