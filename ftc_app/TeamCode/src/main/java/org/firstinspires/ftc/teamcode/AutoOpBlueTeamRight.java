@@ -59,10 +59,10 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
             sleep(2000);
             driveBackwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
-            driveForwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(1, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(2000);
-            driveBackwardDistance(24, bot.AUTO_DRIVE_SPEED_NORMAL);
+            driveBackwardDistance(23, bot.AUTO_DRIVE_SPEED_NORMAL);
         }
 
         // Go back a few inches to align with the balancing stone
@@ -88,7 +88,7 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
         driveBackwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn right.
-        turnRightToAngle(-55);
+        turnRightToAngle(-47);
         driveForwardDistance(10, bot.AUTO_DRIVE_SPEED_SLOW);
 
         bot.shootGlyphOut();
