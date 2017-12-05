@@ -53,7 +53,7 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
             sleep(500);
             driveBackwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
-            driveForwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(1, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
             driveBackwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
@@ -66,7 +66,7 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         driveBackwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Turn Left.
-        turnLeftToAngle(85);
+        turnLeftToAngle(72);
 
        //continue going back to align with wall
         driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
@@ -88,7 +88,7 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn Left.
-        turnLeftToAngle(135);
+        turnLeftToAngle(130);
         driveForwardDistance(13, bot.AUTO_DRIVE_SPEED_SLOW);
         // Drive forward to the cryptobox
 
