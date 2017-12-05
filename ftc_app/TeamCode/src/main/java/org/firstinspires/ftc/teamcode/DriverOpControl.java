@@ -82,18 +82,15 @@ public class DriverOpControl extends LinearOpMode {
         // Suck in or push out the glyphs
         if (gamepad1.left_bumper || gamepad2.left_bumper) {
             bot.suckGlyphIn();
-        } else if (gamepad1.right_bumper || gamepad2.right_bumper){
-            bot.shootGlyphOut();
+//        } else if (gamepad1.right_bumper || gamepad2.right_bumper){
+//            bot.shootGlyphOut();
         } else {
             bot.stopGlyphWheels();
         }
 
         // Move the clasw lifter up or down (continuous motion).
         if(gamepad1.y || gamepad2.y) {
-            if (!isClawLifterOnTop()) {
-                bot.moveClawLifterUp(bot.CLAW_SPEED);
-                sleep(5);
-            }
+            bot.moveClawLifterUp(bot.CLAW_SPEED);
         } else if(gamepad1.a || gamepad2.a) {
             bot.moveClawLifterDown(bot.CLAW_SPEED);
         } else {
