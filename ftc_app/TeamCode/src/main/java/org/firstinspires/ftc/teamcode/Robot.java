@@ -333,7 +333,7 @@ public class Robot {
     }
 
     void clampGlyph() {
-        leftClaw.setPosition(0.25);
+        leftClaw.setPosition(0.3);
         rightClaw.setPosition(0.63);
     }
 

@@ -219,7 +219,7 @@ public abstract class AutoOpBase extends LinearOpMode {
     private void turnLeftToAngleLocal(double targetAngle) {
         float currentAngle = bot.getCurrentAngle();
         if (opModeIsActive() && currentAngle < targetAngle) {
-            bot.autoOpTurnLeft(bot.AUTO_TURN_SPEED_FAST);
+            bot.autoOpTurnLeft(bot.AUTO_TURN_SPEED_NORMAL);
         }
 
         while (opModeIsActive() && targetAngle > currentAngle) {
@@ -263,7 +263,7 @@ public abstract class AutoOpBase extends LinearOpMode {
     private void turnRightToAngleLocal(double targetAngle) {
         float currentAngle = bot.getCurrentAngle();
         if (opModeIsActive() && targetAngle < currentAngle) {
-            bot.turnRight(bot.AUTO_TURN_SPEED_FAST);
+            bot.turnRight(bot.AUTO_TURN_SPEED_NORMAL);
         }
 
         while (opModeIsActive() && targetAngle < currentAngle) {

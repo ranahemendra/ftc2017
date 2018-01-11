@@ -102,22 +102,32 @@ public class NewAutoOpBlueTeamRightwith2moreglyphs extends AutoOpBase {
         turnLeftToAngle(90);
         bot.moveClawLifterDown(bot.CLAW_SPEED);
         sleep(1500);
-        driveForwardDistance(38, bot.AUTO_DRIVE_SPEED_FAST);
+//set power to 0; stops claw lifter
+        bot.resetClawLifter();
+        driveForwardDistance(30, bot.AUTO_DRIVE_SPEED_FAST);
+        driveForwardDistance(4, bot.AUTO_DRIVE_SPEED_SLOW);
         bot.suckGlyphIn();
         bot.clampGlyph();
-
-        for(int x = 0; x < 3; x++) {
+//wiggling glyph in
+        for(int x = 0; x < 7; x++) {
             turnRightToAngle(80);
-            driveForwardDistance(5, bot.AUTO_DRIVE_SPEED_NORMAL);
+            driveForwardDistance(5, bot.AUTO_DRIVE_SPEED_SLOW);
             turnLeftToAngle(100);
         }
-
         bot.stopGlyphWheels();
+//clear the glyph from friction with the ground as you back up
         bot.moveClawLifterUp(bot.CLAW_SPEED);
+        sleep(1500);
+//set power to 0; stops claw lifter
+        bot.resetClawLifter();
         sleep(1000);
         driveBackwardDistance(5, bot.AUTO_DRIVE_SPEED_SLOW);
         turnRightToAngle(-90);
 
+//go back
+        driveBackwardDistance(10,bot.AUTO_DRIVE_SPEED_SLOW);
+        turnLeftToAngle(120);
+        driveForwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         while (opModeIsActive()) {
             // Keep this going.
