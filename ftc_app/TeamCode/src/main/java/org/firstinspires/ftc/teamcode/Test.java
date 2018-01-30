@@ -9,21 +9,21 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Updated by Aahaan on 10/04/2017.
  * Upated by Howard on 10/09/2017
  */
-@TeleOp (name = "Driver Op Control", group = "Driver Op")
-public class DriverOpControl extends LinearOpMode {
+@TeleOp (name = "Test Servo", group = "Driver Op")
+public class Test extends LinearOpMode {
     Robot bot   = new Robot();
 
     @Override
     public void runOpMode() throws InterruptedException {
-         // Initialize the drive system variables.
-         // The init() method of the hardware class does all the work here
+        // Initialize the drive system variables.
+        // The init() method of the hardware class does all the work here
         bot.init(hardwareMap, telemetry);
         telemetry.update();
 
         waitForStart();
 
         while(opModeIsActive()){
-            manageChassis();
+            //manageChassis();
             manageClaw();
 //            manageTelescopicArm();
 //            manageRelicArm();
@@ -79,33 +79,33 @@ public class DriverOpControl extends LinearOpMode {
             bot.unclampGlyph();
         }
 
-        // Suck in or push out the glyphs
-        if (gamepad1.left_bumper || gamepad2.left_bumper) {
-            bot.suckGlyphIn();
-        } else if (gamepad1.right_bumper || gamepad2.right_bumper){
-            bot.shootGlyphOut();
-        } else {
-            bot.stopGlyphWheels();
-        }
-
-        // Move the clasw lifter up or down (continuous motion).
-        if(gamepad1.y || gamepad2.y) {
-            bot.moveClawLifterUp(bot.CLAW_SPEED);
-        } else if(gamepad1.a || gamepad2.a) {
-            bot.moveClawLifterDown(bot.CLAW_SPEED);
-        } else {
-            bot.resetClawLifter();
-        }
-
-        // Move the claw lifter up or down by 7 inches (height of a glyph).
-        if (gamepad2.dpad_up) {
-            moveClawLifterUp(7, bot.CLAW_SPEED);
-        } else if (gamepad2.dpad_down) {
-            moveClawLifterDown(7, bot.CLAW_SPEED);
-        }
-
-        telemetry.addData("claw lifter encoder: ", bot.clawLifter.getCurrentPosition());
-        telemetry.update();
+//        // Suck in or push out the glyphs
+//        if (gamepad1.left_bumper || gamepad2.left_bumper) {
+//            bot.suckGlyphIn();
+////        } else if (gamepad1.right_bumper || gamepad2.right_bumper){
+////            bot.shootGlyphOut();
+//        } else {
+//            bot.stopGlyphWheels();
+//        }
+//
+//        // Move the clasw lifter up or down (continuous motion).
+//        if(gamepad1.y || gamepad2.y) {
+//            bot.moveClawLifterUp(bot.CLAW_SPEED);
+//        } else if(gamepad1.a || gamepad2.a) {
+//            bot.moveClawLifterDown(bot.CLAW_SPEED);
+//        } else {
+//            bot.resetClawLifter();
+//        }
+//
+//        // Move the claw lifter up or down by 7 inches (height of a glyph).
+//        if (gamepad2.dpad_up) {
+//            moveClawLifterUp(7, bot.CLAW_SPEED);
+//        } else if (gamepad2.dpad_down) {
+//            moveClawLifterDown(7, bot.CLAW_SPEED);
+//        }
+//
+//        telemetry.addData("claw lifter encoder: ", bot.clawLifter.getCurrentPosition());
+//        telemetry.update();
     }
 
     boolean isClawLifterOnTop() {
