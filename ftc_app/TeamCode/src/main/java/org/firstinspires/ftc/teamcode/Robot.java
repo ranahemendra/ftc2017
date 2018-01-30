@@ -333,8 +333,8 @@ public class Robot {
     }
 
     void clampGlyph() {
-        leftClaw.setPosition(0.3);
-        rightClaw.setPosition(0.63);
+        leftClaw.setPosition(0.35);
+        rightClaw.setPosition(0.55);
     }
 
     void unclampGlyph() {
@@ -408,8 +408,8 @@ public class Robot {
     }
 
     void suckGlyphIn(){
-        leftGLyphWheel.setPower(-0.5);
-        rightGlyphWheel.setPower(0.5);
+        leftGLyphWheel.setPower(-1);
+        rightGlyphWheel.setPower(1);
     }
 
     void shootGlyphOut(){
