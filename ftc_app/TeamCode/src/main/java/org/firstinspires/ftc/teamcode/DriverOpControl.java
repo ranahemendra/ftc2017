@@ -59,11 +59,11 @@ public class DriverOpControl extends LinearOpMode {
         }
 
         if (leftStickX > 0) {
-            bot.turnRight(leftStickX/2);
+            bot.turnRight(leftStickX);
         }
 
         if(leftStickX < 0){
-            bot.turnLeft(leftStickX/2);
+            bot.turnLeft(leftStickX);
         }
 
         telemetry.addData("DT: ", "LT: %7f, RT: %7f, Turn: %7f", leftTrigger, rightTrigger, leftStickX);
