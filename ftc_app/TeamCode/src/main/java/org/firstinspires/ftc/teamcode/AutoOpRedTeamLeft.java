@@ -88,6 +88,7 @@ public class AutoOpRedTeamLeft extends AutoOpBase {
         while (opModeIsActive()) {
             // Keep this going.
             idle();
+
         }
     }
 }

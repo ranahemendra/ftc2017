@@ -30,17 +30,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 
-
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-@Autonomous(name = "Blue Team Right", group = "Autonomous")
-public class AutoOpBlueTeamRight extends AutoOpBase {
+@Autonomous(name = "New Blue Team Left with 2 more glyphs", group = "Autonomous")
+public class NewAutoOpBlueTeamLeft2moreglyphs extends AutoOpBase {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -54,52 +46,51 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
         //get off balancing stone
         if (leftJewelRed) {
             // move forward
-            driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
-            sleep(2000);
+            sleep(500);
             driveBackwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
             driveForwardDistance(1, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
-            sleep(2000);
-            driveBackwardDistance(23, bot.AUTO_DRIVE_SPEED_NORMAL);
+            sleep(500);
+            driveBackwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
-        bot.moveClawLifterDown(bot.CLAW_SPEED);
-        sleep(800);
-        bot.resetClawLifter();
-
         // Go back a few inches to align with the balancing stone
-        driveForwardDistance(18, bot.AUTO_DRIVE_SPEED_NORMAL);
-
-        // Move glyph away from balancing stone so when you raise the glyph back up, it removes friction from the balancing stone.
-        driveBackwardDistance(1, bot. AUTO_DRIVE_SPEED_NORMAL);
-
-        bot.moveClawLifterUp(bot.CLAW_SPEED);
-        sleep(300);
-        bot.resetClawLifter();
+        driveForwardDistance(14, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Come back to the original position.
-        driveBackwardDistance(14, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(6, bot.AUTO_DRIVE_SPEED_NORMAL);
+
+        // Turn Left.
+        turnLeftToAngle(72);
+
+       //continue going back to align with wall
+        driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
+
+        //go back to original position
+        driveForwardDistance(7, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Vumark", scannedVuMark);
 
-        // go to distance slightly over corresponding section of cryptobox
         int driveDistance = 3;
         if(scannedVuMark == scannedVuMark.RIGHT) {
-            driveDistance += 17;
+            driveDistance += 14;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
-            driveDistance += 4;
+            driveDistance += 7;
         } else if (scannedVuMark == scannedVuMark.LEFT) {
             // Don't do anything.
         }
 
-        // Drive forward to the cryptobox
-        driveBackwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
+        driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
-        // Turn right.
-        turnRightToAngle(-38);
-        driveForwardDistance(15, bot.AUTO_DRIVE_SPEED_SLOW);
+        // Turn Left.
+        turnLeftToAngle(130);
+        driveForwardDistance(13, bot.AUTO_DRIVE_SPEED_SLOW);
+        // Drive forward to the cryptobox
+
+        //shoots glyph out
 
         bot.shootGlyphOut();
         bot.unclampGlyph();
@@ -108,9 +99,10 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
 
         driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_NORMAL);
+        // Drive forward to the cryptobox again
+        driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_SLOW);
 
-        driveBackwardDistance(7, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(5, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();

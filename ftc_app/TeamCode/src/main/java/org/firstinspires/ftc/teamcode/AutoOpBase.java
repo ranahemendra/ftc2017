@@ -77,11 +77,12 @@ public abstract class AutoOpBase extends LinearOpMode {
 
         // Hold glyph.
         bot.clampGlyph();
+        sleep(300);
         bot.suckGlyphIn();
         sleep(100);
         bot.stopGlyphWheels();
         bot.moveClawLifterUp(bot.CLAW_SPEED);
-        sleep(1500);
+        sleep(1000);
         bot.resetClawLifter();
     }
 
