@@ -90,11 +90,13 @@ public class DriverOpControl extends LinearOpMode {
 
         // Move the clasw lifter up or down (continuous motion).
         if(gamepad1.y || gamepad2.y) {
-            bot.moveClawLifterUp(bot.CLAW_SPEED);
+            if (bot.clawLifterRight.getCurrentPosition() >= -1240) {
+                bot.moveClawLifterUp(bot.CLAW_SPEED);
+            }
         } else if(gamepad1.a || gamepad2.a) {
             bot.moveClawLifterDown(bot.CLAW_SPEED);
         } else {
-            bot.resetClawLifter();
+            bot.pauseClawLifter(0.2);
         }
 
         // Move the claw lifter up or down by 7 inches (height of a glyph).
@@ -104,7 +106,8 @@ public class DriverOpControl extends LinearOpMode {
             moveClawLifterDown(7, bot.CLAW_SPEED);
         }
 
-        telemetry.addData("claw lifter encoder: ", bot.clawLifter.getCurrentPosition());
+        telemetry.addData("claw lifter: ", bot.clawLifterLeft.getCurrentPosition());
+        telemetry.addData("claw lifter: ", bot.clawLifterRight.getCurrentPosition());
         telemetry.update();
     }
 

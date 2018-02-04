@@ -71,9 +71,9 @@ public class Robot {
     static final double AUTO_DRIVE_SPEED_FAST   = 1.0;
 
     static final double CLAW_SPEED                      = 1;
-    static final double CLAW_COUNTS_PER_REV             = 1440;
+    static final double CLAW_COUNTS_PER_REV             = 288;
     static final double CLAW_GEAR_REDUCTION             = 1.0;
-    static final double CLAW_SPINDLE_DIAMETER_INCHES    = 5.25;
+    static final double CLAW_SPINDLE_DIAMETER_INCHES    = 1;
     static final double CLAW_COUNTS_PER_INCH            = (CLAW_COUNTS_PER_REV * CLAW_GEAR_REDUCTION) / (CLAW_SPINDLE_DIAMETER_INCHES * Math.PI);
 
     static final double TELESCOPIC_ARM_SPEED    = 1;
@@ -152,7 +152,12 @@ public class Robot {
         glyphSensor = hardwareMap.digitalChannel.get("glyphSensor");
         glyphSensor.setMode(DigitalChannel.Mode.INPUT);
         clawLifterLeft = hardwareMap.dcMotor.get("spindle_left");
+        clawLifterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        clawLifterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         clawLifterRight = hardwareMap.dcMotor.get("spindle_right");
+//        clawLifterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        clawLifterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         //relicArm = hardwareMap.dcMotor.get("relic_arm");
         relicHolder = hardwareMap.servo.get("relic_holder");
@@ -325,7 +330,13 @@ public class Robot {
 
     void moveClawLifterDown(double power) {
         clawLifterLeft.setPower(-power);
-        clawLifterRight.setPower(power);    }
+        clawLifterRight.setPower(power);
+    }
+
+    void pauseClawLifter(double power) {
+        clawLifterLeft.setPower(power);
+        clawLifterRight.setPower(-power);
+    }
 
     void resetClawLifter() {
         clawLifterLeft.setPower(0);
@@ -337,8 +348,8 @@ public class Robot {
     }
 
     void clampGlyph() {
-        leftClaw.setPosition(0.53);
-        rightClaw.setPosition(0.47);
+        leftClaw.setPosition(0.35);
+        rightClaw.setPosition(0.57);
     }
 
     void unclampGlyph() {
@@ -412,12 +423,12 @@ public class Robot {
     }
 
     void suckGlyphIn(){
-        leftGLyphWheel.setPower(1);
+        leftGLyphWheel.setPower(-1);
         rightGlyphWheel.setPower(1);
     }
 
     void shootGlyphOut(){
-        leftGLyphWheel.setPower(-0.5);
+        leftGLyphWheel.setPower(0.5);
         rightGlyphWheel.setPower(-0.5);
     }
 
