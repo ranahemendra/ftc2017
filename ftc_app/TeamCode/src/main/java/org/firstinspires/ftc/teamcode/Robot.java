@@ -94,11 +94,13 @@ public class Robot {
     DcMotor motorRight;
 
     DcMotor clawLifter;
+    DcMotor clawLifterLeft;
+    DcMotor clawLifterRight;
     Servo leftClaw;
     Servo rightClaw;
 
     DcMotor telescopicArmMotor;
-    DcMotor relicArm;
+//     DcMotor relicArm;
     Servo relicHolder;
 
     Servo jewelKnocker;
@@ -149,9 +151,10 @@ public class Robot {
         telescopicArmMotor = hardwareMap.dcMotor.get("telescopic_arm_motor");
         glyphSensor = hardwareMap.digitalChannel.get("glyphSensor");
         glyphSensor.setMode(DigitalChannel.Mode.INPUT);
+        clawLifterLeft = hardwareMap.dcMotor.get("spindle_left");
+        clawLifterRight = hardwareMap.dcMotor.get("spindle_right");
 
-
-        relicArm = hardwareMap.dcMotor.get("relic_arm");
+        //relicArm = hardwareMap.dcMotor.get("relic_arm");
         relicHolder = hardwareMap.servo.get("relic_holder");
 
         jewelKnocker = hardwareMap.servo.get("jewelKnocker");
@@ -170,7 +173,7 @@ public class Robot {
 
         // Set the default position of all the servos.
         resetTelescopicArm();
-        stopRelicArm();
+        // stopRelicArm();
         resetRelicHolder();
 
         resetJewelKnocker();
@@ -304,28 +307,29 @@ public class Robot {
     }
 
     void resetJewelKnocker() {
-        jewelKnocker.setPosition(0);
+        jewelKnocker.setPosition(0.9);
     }
 
     // move jewel knocker in many sections with pauses in-between in order to decrease momentum that could knock the wrong jewel out with a glancing strike.
     void moveJewelKnockerDown() throws InterruptedException {
-        while (jewelKnocker.getPosition() <= 0.8) {
-            jewelKnocker.setPosition(jewelKnocker.getPosition() + 0.1);
+        while (jewelKnocker.getPosition() >= 0.2) {
+            jewelKnocker.setPosition(jewelKnocker.getPosition() - 0.1);
             Thread.sleep(200);
         }
     }
 
     void moveClawLifterUp(double power) {
-        clawLifter.setPower(power);
+        clawLifterLeft.setPower(power);
+        clawLifterRight.setPower(-power);
     }
 
     void moveClawLifterDown(double power) {
-        clawLifter.setPower(-1 * power);
-    }
+        clawLifterLeft.setPower(-power);
+        clawLifterRight.setPower(power);    }
 
     void resetClawLifter() {
-        clawLifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        clawLifter.setPower(0);
+        clawLifterLeft.setPower(0);
+        clawLifterRight.setPower(0);
     }
 
     void resetGlyphHolder() {
@@ -333,13 +337,13 @@ public class Robot {
     }
 
     void clampGlyph() {
-        leftClaw.setPosition(0.35);
-        rightClaw.setPosition(0.55);
+        leftClaw.setPosition(0.53);
+        rightClaw.setPosition(0.47);
     }
 
     void unclampGlyph() {
 //        resetGlyphHolder();
-        leftClaw.setPosition(0.1);
+        leftClaw.setPosition(0.2);
         rightClaw.setPosition(0.8);
     }
 
@@ -356,20 +360,20 @@ public class Robot {
     }
 
     // Initializing continuous rotation servo
-    void stopRelicArm() {
-        relicArm.setPower(0);
-    }
+//    void stopRelicArm() {
+//        relicArm.setPower(0);
+//    }
 
     // Sets Relic Arm Power
-    void relicArmUp(double power) throws InterruptedException {
-        relicArm.setDirection(DcMotor.Direction.FORWARD);
-        relicArm.setPower(power);
-    }
+//    void relicArmUp(double power) throws InterruptedException {
+//        relicArm.setDirection(DcMotor.Direction.FORWARD);
+//        relicArm.setPower(power);
+//    }
 
-    void relicArmDown(double power) {
-        relicArm.setDirection(DcMotor.Direction.REVERSE);
-        relicArm.setPower(power);
-    }
+//    void relicArmDown(double power) {
+//        relicArm.setDirection(DcMotor.Direction.REVERSE);
+//        relicArm.setPower(power);
+//    }
 
     void resetRelicHolder() {
         relicHolder.setPosition(1);
@@ -408,12 +412,12 @@ public class Robot {
     }
 
     void suckGlyphIn(){
-        leftGLyphWheel.setPower(-1);
+        leftGLyphWheel.setPower(1);
         rightGlyphWheel.setPower(1);
     }
 
     void shootGlyphOut(){
-        leftGLyphWheel.setPower(0.5);
+        leftGLyphWheel.setPower(-0.5);
         rightGlyphWheel.setPower(-0.5);
     }
 
