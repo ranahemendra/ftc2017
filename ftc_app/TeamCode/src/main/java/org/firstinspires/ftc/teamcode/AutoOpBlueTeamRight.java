@@ -65,31 +65,21 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
             driveBackwardDistance(23, bot.AUTO_DRIVE_SPEED_NORMAL);
         }
 
-        bot.moveClawLifterDown(bot.CLAW_SPEED);
-        sleep(800);
-        bot.resetClawLifter();
-
         // Go back a few inches to align with the balancing stone
-        driveForwardDistance(18, bot.AUTO_DRIVE_SPEED_NORMAL);
-
-        // Move glyph away from balancing stone so when you raise the glyph back up, it removes friction from the balancing stone.
-        driveBackwardDistance(1, bot. AUTO_DRIVE_SPEED_NORMAL);
-
-        bot.moveClawLifterUp(bot.CLAW_SPEED);
-        sleep(300);
-        bot.resetClawLifter();
+        driveForwardDistance(11, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Come back to the original position.
-        driveBackwardDistance(14, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(15, bot.AUTO_DRIVE_SPEED_NORMAL);
+
 
         telemetry.addData("Vumark", scannedVuMark);
 
         // go to distance slightly over corresponding section of cryptobox
-        int driveDistance = 3;
+        int driveDistance = 11;
         if(scannedVuMark == scannedVuMark.RIGHT) {
-            driveDistance += 17;
+            driveDistance += 14;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
-            driveDistance += 4;
+            driveDistance += 7;
         } else if (scannedVuMark == scannedVuMark.LEFT) {
             // Don't do anything.
         }
@@ -98,8 +88,8 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
         driveBackwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn right.
-        turnRightToAngle(-38);
-        driveForwardDistance(15, bot.AUTO_DRIVE_SPEED_SLOW);
+        turnRightToAngle(-52);
+        driveForwardDistance(13, bot.AUTO_DRIVE_SPEED_SLOW);
 
         bot.shootGlyphOut();
         bot.unclampGlyph();
@@ -108,7 +98,7 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
 
         driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveForwardDistance(10, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         driveBackwardDistance(7, bot.AUTO_DRIVE_SPEED_NORMAL);
 
