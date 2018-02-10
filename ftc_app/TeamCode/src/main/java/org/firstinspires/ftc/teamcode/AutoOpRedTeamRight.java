@@ -93,7 +93,7 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         driveForwardDistance(currentAngle, driveDistance, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         // Turn right.
-        currentAngle = 22;
+        currentAngle = 25;
         turnRightToAngle(currentAngle);
         driveForwardDistance(currentAngle, 6, bot.AUTO_DRIVE_SPEED_SLOW);
         bot.moveClawLifterDown(bot.CLAW_SPEED);
