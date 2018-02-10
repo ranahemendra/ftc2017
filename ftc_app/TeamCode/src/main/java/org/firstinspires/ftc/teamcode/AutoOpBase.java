@@ -83,7 +83,7 @@ public abstract class AutoOpBase extends LinearOpMode {
         bot.stopGlyphWheels();
         bot.moveClawLifterUp(bot.CLAW_SPEED);
         sleep(1000);
-        bot.resetClawLifter();
+        bot.pauseClawLifter(bot.CLAW_PAUSE_SPEED);
     }
 
     void driveForwardDistance(double maintainAngle, int forwardInches, double driveSpeed) {
@@ -220,7 +220,7 @@ public abstract class AutoOpBase extends LinearOpMode {
     private void turnLeftToAngleLocal(double targetAngle) {
         float currentAngle = bot.getCurrentAngle();
         if (opModeIsActive() && currentAngle < targetAngle) {
-            bot.autoOpTurnLeft(bot.AUTO_TURN_SPEED_FAST);
+            bot.autoOpTurnLeft(bot.AUTO_TURN_SPEED_NORMAL);
         }
 
         while (opModeIsActive() && targetAngle > currentAngle) {
@@ -264,7 +264,7 @@ public abstract class AutoOpBase extends LinearOpMode {
     private void turnRightToAngleLocal(double targetAngle) {
         float currentAngle = bot.getCurrentAngle();
         if (opModeIsActive() && targetAngle < currentAngle) {
-            bot.turnRight(bot.AUTO_TURN_SPEED_FAST);
+            bot.turnRight(bot.AUTO_TURN_SPEED_NORMAL);
         }
 
         while (opModeIsActive() && targetAngle < currentAngle) {

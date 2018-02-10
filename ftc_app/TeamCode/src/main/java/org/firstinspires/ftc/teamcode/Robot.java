@@ -71,6 +71,7 @@ public class Robot {
     static final double AUTO_DRIVE_SPEED_FAST   = 1.0;
 
     static final double CLAW_SPEED                      = 1;
+    static final double CLAW_PAUSE_SPEED                = 0.2;
     static final double CLAW_COUNTS_PER_REV             = 288;
     static final double CLAW_GEAR_REDUCTION             = 1.0;
     static final double CLAW_SPINDLE_DIAMETER_INCHES    = 1;
@@ -348,14 +349,17 @@ public class Robot {
     }
 
     void clampGlyph() {
-        leftClaw.setPosition(0.35);
+        leftClaw.setPosition(0.43);
         rightClaw.setPosition(0.57);
+//        leftClaw.setPosition(0.3);
+//        rightClaw.setPosition(0.30);
     }
 
     void unclampGlyph() {
-//        resetGlyphHolder();
         leftClaw.setPosition(0.2);
         rightClaw.setPosition(0.8);
+//        leftClaw.setPosition(0.75);
+//        rightClaw.setPosition(0);
     }
 
     void resetTelescopicArm() {

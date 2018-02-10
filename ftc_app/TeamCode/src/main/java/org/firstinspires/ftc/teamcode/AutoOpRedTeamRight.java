@@ -58,16 +58,16 @@ public class AutoOpRedTeamRight extends AutoOpBase {
             driveForwardDistance(3, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(currentAngle, 17, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveForwardDistance(currentAngle, 20, bot.AUTO_DRIVE_SPEED_SLOW);
         } else {
             driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(500);
-            driveForwardDistance(currentAngle, 22, bot.AUTO_DRIVE_SPEED_NORMAL);
+            driveForwardDistance(currentAngle, 25, bot.AUTO_DRIVE_SPEED_NORMAL);
         }
 
         // Go back a few inches to align with the balancing stone
-        driveBackwardDistance(14, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(17, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Come back to the original position.
         driveForwardDistance(currentAngle, 4, bot.AUTO_DRIVE_SPEED_NORMAL);
@@ -79,7 +79,7 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         // Back up all the way to the wall.
         driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        int driveDistance = 13;
+        int driveDistance = 14;
         if(scannedVuMark == scannedVuMark.LEFT) {
             driveDistance += 15;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -95,10 +95,13 @@ public class AutoOpRedTeamRight extends AutoOpBase {
         // Turn right.
         currentAngle = 22;
         turnRightToAngle(currentAngle);
-        driveForwardDistance(currentAngle, 3, bot.AUTO_DRIVE_SPEED_SLOW);
+        driveForwardDistance(currentAngle, 6, bot.AUTO_DRIVE_SPEED_SLOW);
+        bot.moveClawLifterDown(bot.CLAW_SPEED);
+        sleep(1000);
+        bot.pauseClawLifter(bot.CLAW_PAUSE_SPEED);
         bot.unclampGlyph();
         sleep(500);
-        driveForwardDistance(currentAngle, 2, bot.AUTO_DRIVE_SPEED_SLOW);
+        driveForwardDistance(currentAngle, 5, bot.AUTO_DRIVE_SPEED_SLOW);
 
         driveBackwardDistance(3, bot.AUTO_DRIVE_SPEED_NORMAL);
 
