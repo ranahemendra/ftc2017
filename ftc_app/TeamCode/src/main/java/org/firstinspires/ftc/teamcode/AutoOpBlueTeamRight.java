@@ -52,7 +52,7 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
         startBot();
 
         //get off balancing stone
-        //These two measures total differently(19 v.s. 25) b/c somehow distance varies
+        //These two measures total differently(17 v.s. 25) b/c somehow distance varies
         if (leftJewelRed) {
             // move forward
             driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
