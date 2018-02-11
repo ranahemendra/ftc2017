@@ -59,6 +59,10 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
             driveBackwardDistance(26, bot.AUTO_DRIVE_SPEED_SLOW);
         }
 
+        bot.moveClawLifterDown(bot.CLAW_SPEED);
+        sleep(800);
+        bot.pauseClawLifter(bot.CLAW_PAUSE_SPEED);
+
         // Go back a few inches to align with the balancing stone
         driveForwardDistance(14, bot.AUTO_DRIVE_SPEED_NORMAL);
 
@@ -69,14 +73,11 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         turnLeftToAngle(72);
 
        //continue going back to align with wall
-        driveBackwardDistance(30, bot.AUTO_DRIVE_SPEED_NORMAL);
-
-        //go back to original position
-        driveForwardDistance(7, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(20, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Vumark", scannedVuMark);
 
-        int driveDistance = 3;
+        int driveDistance = 12;
         if(scannedVuMark == scannedVuMark.RIGHT) {
             driveDistance += 14;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
@@ -88,7 +89,7 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         driveForwardDistance(driveDistance, bot.AUTO_DRIVE_SPEED_SLOW);
 
         // Turn Left.
-        turnLeftToAngle(130);
+        turnLeftToAngle(137);
         driveForwardDistance(13, bot.AUTO_DRIVE_SPEED_SLOW);
         // Drive forward to the cryptobox
 
@@ -104,7 +105,7 @@ public class AutoOpBlueTeamLeft extends AutoOpBase {
         // Drive forward to the cryptobox again
         driveForwardDistance(8, bot.AUTO_DRIVE_SPEED_SLOW);
 
-        driveBackwardDistance(5, bot.AUTO_DRIVE_SPEED_NORMAL);
+        driveBackwardDistance(4, bot.AUTO_DRIVE_SPEED_NORMAL);
 
         telemetry.addData("Time taken", getRuntime());
         telemetry.update();
