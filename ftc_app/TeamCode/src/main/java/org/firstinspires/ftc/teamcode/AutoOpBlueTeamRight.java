@@ -52,34 +52,35 @@ public class AutoOpBlueTeamRight extends AutoOpBase {
         startBot();
 
         //get off balancing stone
+        //These two measures total differently(19 v.s. 25) b/c somehow distance varies
         if (leftJewelRed) {
             // move forward
             driveBackwardDistance(2, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(2000);
-            driveBackwardDistance(20, bot.AUTO_DRIVE_SPEED_SLOW);
+            driveBackwardDistance(15, bot.AUTO_DRIVE_SPEED_NORMAL);
         } else {
             driveForwardDistance(1, bot.AUTO_DRIVE_SPEED_SLOW);
             bot.resetJewelKnocker();
             sleep(2000);
-            driveBackwardDistance(23, bot.AUTO_DRIVE_SPEED_NORMAL);
+            driveBackwardDistance(24, bot.AUTO_DRIVE_SPEED_NORMAL);
         }
+
+        bot.moveClawLifterDown(bot.CLAW_SPEED);
+        sleep(800);
+        bot.pauseClawLifter(bot.CLAW_PAUSE_SPEED);
 
         // Go back a few inches to align with the balancing stone
         driveForwardDistance(11, bot.AUTO_DRIVE_SPEED_NORMAL);
 
-        // Come back to the original position.
-        driveBackwardDistance(15, bot.AUTO_DRIVE_SPEED_NORMAL);
-
-
         telemetry.addData("Vumark", scannedVuMark);
 
         // go to distance slightly over corresponding section of cryptobox
-        int driveDistance = 11;
+        int driveDistance = 15;
         if(scannedVuMark == scannedVuMark.RIGHT) {
-            driveDistance += 14;
+            driveDistance += 15;
         } else if (scannedVuMark == scannedVuMark.CENTER) {
-            driveDistance += 7;
+            driveDistance += 8;
         } else if (scannedVuMark == scannedVuMark.LEFT) {
             // Don't do anything.
         }
