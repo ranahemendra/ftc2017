@@ -90,9 +90,9 @@ public class DriverOpControl extends LinearOpMode {
 
         // Move the clasw lifter up or down (continuous motion).
         if(gamepad1.y || gamepad2.y) {
-            if (bot.clawLifterRight.getCurrentPosition() >= -1240) {
+//            if (bot.clawLifterRight.getCurrentPosition() >= -1240) {
                 bot.moveClawLifterUp(bot.CLAW_SPEED);
-            }
+//            }
         } else if(gamepad1.a || gamepad2.a) {
             bot.moveClawLifterDown(bot.CLAW_SPEED);
         } else {
@@ -106,8 +106,8 @@ public class DriverOpControl extends LinearOpMode {
             moveClawLifterDown(7, bot.CLAW_SPEED);
         }
 
-        telemetry.addData("claw lifter: ", bot.clawLifterLeft.getCurrentPosition());
-        telemetry.addData("claw lifter: ", bot.clawLifterRight.getCurrentPosition());
+        telemetry.addData("left claw: ", bot.leftClaw.getPosition());
+        telemetry.addData("right claw: ", bot.rightClaw.getPosition());
         telemetry.update();
     }
 

@@ -349,17 +349,15 @@ public class Robot {
     }
 
     void clampGlyph() {
-        leftClaw.setPosition(0.43);
-        rightClaw.setPosition(0.57);
-//        leftClaw.setPosition(0.3);
-//        rightClaw.setPosition(0.30);
+        leftClaw.setPosition(0.30);
+        rightClaw.setPosition(0.62);
+//        leftClaw.setPosition(0.33);
+//        rightClaw.setPosition(0.59);
     }
 
     void unclampGlyph() {
         leftClaw.setPosition(0.2);
         rightClaw.setPosition(0.8);
-//        leftClaw.setPosition(0.75);
-//        rightClaw.setPosition(0);
     }
 
     void resetTelescopicArm() {
