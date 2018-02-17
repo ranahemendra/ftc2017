@@ -30,8 +30,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 @Autonomous(name = "New Blue Team Right with 2 more glyphs", group = "Autonomous")
+@Disabled
 public class NewAutoOpBlueTeamRightwith2moreglyphs extends AutoOpBase {
 
     @Override
